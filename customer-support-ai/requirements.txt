@@ -1,0 +1,50 @@
+# ============================================================
+# Multi-Agent AI Customer Support Assistant — Backend Dependencies
+# Install with: pip install -r requirements.txt
+# ============================================================
+
+# --- Web Framework ------------------------------------------
+fastapi
+uvicorn[standard]
+
+# --- Authentication -----------------------------------------
+python-jose[cryptography]
+passlib[bcrypt]
+
+# --- Database -----------------------------------------------
+sqlalchemy
+asyncpg
+alembic
+
+# --- Data Validation ----------------------------------------
+pydantic
+pydantic-settings
+
+# --- Environment --------------------------------------------
+python-dotenv
+python-multipart
+
+# --- AI / LLM -----------------------------------------------
+langchain
+langchain-community
+langchain-google-genai
+google-generativeai
+
+# --- Embeddings & Vector Store ------------------------------
+faiss-cpu
+sentence-transformers
+
+# --- Document Processing ------------------------------------
+pypdf
+pandas
+
+# --- Rate Limiting ------------------------------------------
+slowapi
+
+# --- Logging ------------------------------------------------
+loguru
+
+# --- Testing ------------------------------------------------
+pytest
+pytest-asyncio
+httpx

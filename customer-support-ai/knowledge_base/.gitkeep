@@ -1,0 +1,14 @@
+# Place TechMart Electronics knowledge base PDFs here.
+#
+# Required files:
+#   - FAQ.pdf
+#   - RefundPolicy.pdf
+#   - ShippingPolicy.pdf
+#   - Warranty.pdf
+#   - Pricing.pdf
+#   - Products.pdf
+#   - InstallationGuide.pdf
+#   - UserManual.pdf
+#
+# Run backend/scripts/ingest_documents.py after adding PDFs
+# to build the FAISS index.
