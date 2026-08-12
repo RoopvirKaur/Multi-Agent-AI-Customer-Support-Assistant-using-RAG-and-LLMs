@@ -50,10 +50,10 @@ Phase 0 (Setup)
 
 ### 0.1 Repository & Tooling
 
-- [ ] Initialize Git repository with `main` and `dev` branches
-- [ ] Create root `README.md` with project description
-- [ ] Add `.gitignore` (Python, Node, `.env` files)
-- [ ] Create `requirements.txt` (backend) and `package.json` (frontend) stubs
+- [x] Initialize Git repository with `main` and `dev` branches
+- [x] Create root `README.md` with project description
+- [x] Add `.gitignore` (Python, Node, `.env` files)
+- [x] Create `requirements.txt` (backend) and `package.json` (frontend) stubs
 
 **Folder scaffold to create:**
 ```
@@ -77,10 +77,10 @@ customer-support-ai/
 
 ### 0.2 External Service Accounts
 
-- [ ] Create **Supabase** project → note `DATABASE_URL`
-- [ ] Create **Google Gemini API** key → note `GEMINI_API_KEY`
-- [ ] Create **Vercel** account (linked to GitHub repo)
-- [ ] Create **Railway** or **Render** account
+- [x] Create **Supabase** project → note `DATABASE_URL` (Configured in `.env`)
+- [x] Create **Google Gemini API** key → note `GEMINI_API_KEY` (Configured in `.env`)
+- [x] Create **Vercel** account (linked to GitHub repo)
+- [x] Create **Railway** or **Render** account
 
 ### 0.3 Environment Configuration
 
@@ -99,8 +99,8 @@ FRONTEND_URL=http://localhost:3000
 
 ### 0.4 Python Environment
 
-- [ ] Create Python virtual environment (`python -m venv venv`)
-- [ ] Install base backend dependencies:
+- [x] Create Python virtual environment (`python -m venv venv`)
+- [x] Install base backend dependencies:
 
 ```
 fastapi
@@ -122,11 +122,11 @@ pandas
 
 ### 0.5 Node.js Environment
 
-- [ ] Scaffold Next.js frontend:
+- [x] Scaffold Next.js frontend:
 ```bash
 npx create-next-app@latest frontend --typescript --tailwind --app
 ```
-- [ ] Install additional frontend packages:
+- [x] Install additional frontend packages:
 ```bash
 npm install axios react-markdown lucide-react
 ```

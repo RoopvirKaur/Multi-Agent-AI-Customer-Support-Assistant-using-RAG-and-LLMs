@@ -1,7 +1,7 @@
-// useAuth.ts — React Context for auth state
+// useAuth.tsx — React Context for auth state
 // Fully implemented in Phase 3
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
   token: string | null;
