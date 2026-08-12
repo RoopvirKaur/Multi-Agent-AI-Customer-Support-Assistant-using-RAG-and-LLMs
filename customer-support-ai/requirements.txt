@@ -19,6 +19,7 @@ alembic
 # --- Data Validation ----------------------------------------
 pydantic
 pydantic-settings
+email-validator
 
 # --- Environment --------------------------------------------
 python-dotenv

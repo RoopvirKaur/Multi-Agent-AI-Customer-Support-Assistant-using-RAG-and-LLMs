@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/hooks/useAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TechMart Support — AI Customer Assistant",
+  title: "TechMart AI Support — Multi-Agent Customer Assistant",
   description:
-    "Multi-agent AI customer support assistant for TechMart Electronics. Get instant help with billing, technical support, products, and more.",
+    "Next-generation multi-agent AI customer support for TechMart Electronics. Instant assistance for billing, technical troubleshooting, product information, and policies.",
 };
 
 export default function RootLayout({
@@ -17,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

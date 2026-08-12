@@ -142,8 +142,8 @@ npm install axios react-markdown lucide-react
 
 ### 1.1 Supabase Project Initialization
 
-- [ ] Log in to Supabase and open the SQL editor
-- [ ] Run the schema creation script:
+- [x] Log in to Supabase and open the SQL editor
+- [x] Run the schema creation script:
 
 **Tables to create:**
 
@@ -203,17 +203,17 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 1.2 SQLAlchemy ORM Models
 
-- [ ] Create `backend/database/connection.py` — async engine + session factory
-- [ ] Create `backend/database/models.py` — ORM classes mirroring SQL schema
-- [ ] Create `backend/database/crud.py` — helper functions:
+- [x] Create `backend/database/connection.py` — async engine + session factory
+- [x] Create `backend/database/models.py` — ORM classes mirroring SQL schema
+- [x] Create `backend/database/crud.py` — helper functions:
   - `create_user()`, `get_user_by_email()`
   - `create_session()`, `get_sessions_by_user()`
   - `save_message()`, `get_messages_by_session()`
 
 ### 1.3 Verification
 
-- [ ] Run a test script to connect to Supabase and insert/retrieve a test row
-- [ ] Confirm all indexes exist in Supabase dashboard
+- [x] Run a test script to connect to Supabase and insert/retrieve a test row
+- [x] Confirm all indexes exist in Supabase dashboard
 
 **Deliverable:** Supabase schema live, ORM models defined, CRUD helpers tested.
 
@@ -225,53 +225,53 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 2.1 FastAPI App Entry Point
 
-- [ ] Create `backend/main.py`:
+- [x] Create `backend/main.py`:
   - Register all routers (`/api/auth`, `/api/chat`, `/api/history`, `/api/ingest`)
   - Configure CORS middleware (allow `FRONTEND_URL`)
   - Add lifespan handler to initialize DB connection on startup
 
 ### 2.2 Pydantic Schemas
 
-- [ ] `backend/models/user.py` — `UserCreate`, `UserLogin`, `UserOut`
-- [ ] `backend/models/message.py` — `MessageIn`, `MessageOut`, `ChatResponse`
-- [ ] `backend/models/intent.py` — `IntentLabel`, `IntentResponse`
+- [x] `backend/models/user.py` — `UserCreate`, `UserLogin`, `UserOut`, `Token`, `TokenData`
+- [x] `backend/models/message.py` — `MessageIn`, `MessageOut`, `ChatResponse`, `SessionCreate`, `SessionOut`
+- [x] `backend/models/intent.py` — `IntentLabel`, `IntentResponse`
 
 ### 2.3 Authentication Module
 
-- [ ] Create `backend/api/auth.py`:
+- [x] Create `backend/api/auth.py`:
   - `POST /api/auth/register` — hash password with bcrypt, insert into `users`
   - `POST /api/auth/login` — verify bcrypt hash, return signed JWT (HS256)
   - `POST /api/auth/refresh` — verify old token, issue new token
-- [ ] Create `backend/middleware/auth_middleware.py`:
+- [x] Create `backend/middleware/auth_middleware.py`:
   - FastAPI `Depends()` function that extracts and validates Bearer JWT
   - Returns `user_id` for use in protected routes
 
 ### 2.4 Chat API (Stub)
 
-- [ ] Create `backend/api/chat.py`:
+- [x] Create `backend/api/chat.py`:
   - `POST /api/chat/message` — accepts `{ session_id, message }`, returns stub response `{ response: "Working...", agents_invoked: [] }`
   - `GET /api/chat/sessions` — returns list of sessions for authenticated user
 
 ### 2.5 History API
 
-- [ ] Create `backend/api/history.py`:
+- [x] Create `backend/api/history.py`:
   - `GET /api/history/{session_id}` — returns all messages for a session (authenticated)
 
 ### 2.6 Ingest API (Stub)
 
-- [ ] Create `backend/api/ingest.py`:
+- [x] Create `backend/api/ingest.py`:
   - `POST /api/ingest/upload` — accepts PDF file upload, returns `{ status: "received" }` (full pipeline wired in Phase 4)
 
 ### 2.7 Middleware
 
-- [ ] `backend/middleware/cors_middleware.py` — CORS config
-- [ ] Rate limiting: add `slowapi` for 30 requests/min per user
+- [x] `backend/middleware/cors_middleware.py` — CORS config
+- [x] Rate limiting: add `slowapi` for 30 requests/min per user
 
 ### 2.8 Verification
 
-- [ ] Run `uvicorn backend.main:app --reload`
-- [ ] Test all endpoints using Swagger UI (`http://localhost:8000/docs`)
-- [ ] Verify register → login → get JWT → access protected route works end-to-end
+- [x] Run `uvicorn backend.main:app --reload`
+- [x] Test all endpoints using Swagger UI (`http://localhost:8000/docs`)
+- [x] Verify register → login → get JWT → access protected route works end-to-end
 
 **Deliverable:** Fully working auth flow, all API routes registered and responding, Swagger docs available.
 
@@ -283,32 +283,32 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 3.1 Global Styles & Design System
 
-- [ ] Configure `tailwind.config.ts` with custom color palette and fonts
-- [ ] Set up `globals.css` with CSS variables for theming
-- [ ] Install and configure Google Font (e.g., Inter)
+- [x] Configure `tailwind.config.ts` with custom color palette and fonts
+- [x] Set up `globals.css` with CSS variables for theming
+- [x] Install and configure Google Font (e.g., Inter)
 
 ### 3.2 Auth Service & Hooks
 
-- [ ] `frontend/services/api.ts` — Axios instance with `baseURL` and JWT interceptor
-- [ ] `frontend/services/authService.ts` — `login()`, `register()`, `logout()`, `refreshToken()`
-- [ ] `frontend/hooks/useAuth.ts` — React Context for auth state; stores JWT in `localStorage`
+- [x] `frontend/services/api.ts` — Axios instance with `baseURL` and JWT interceptor
+- [x] `frontend/services/authService.ts` — `login()`, `register()`, `logout()`, `refreshToken()`
+- [x] `frontend/hooks/useAuth.tsx` — React Context for auth state; stores JWT in `localStorage`
 
 ### 3.3 Pages
 
-#### Login Page (`pages/login.tsx`)
-- [ ] Email + password form
-- [ ] Submit calls `authService.login()`, stores JWT, redirects to `/chat`
-- [ ] Link to Register page
+#### Login Page (`app/login/page.tsx`)
+- [x] Email + password form
+- [x] Submit calls `authService.login()`, stores JWT, redirects to `/chat`
+- [x] Link to Register page
 
-#### Register Page (`pages/register.tsx`)
-- [ ] Name + email + password form
-- [ ] Submit calls `authService.register()`, auto-login on success
+#### Register Page (`app/register/page.tsx`)
+- [x] Name + email + password form
+- [x] Submit calls `authService.register()`, auto-login on success
 
-#### Chat Page (`pages/chat.tsx`) — **Core page**
-- [ ] Protected route (redirect to `/login` if no JWT)
-- [ ] Layout: left sidebar (session list) + main chat area
-- [ ] On load: fetch and display user's sessions via `GET /api/chat/sessions`
-- [ ] Start new session button
+#### Chat Page (`app/chat/page.tsx`) — **Core page**
+- [x] Protected route (redirect to `/login` if no JWT)
+- [x] Layout: left sidebar (session list) + main chat area
+- [x] On load: fetch and display user's sessions via `GET /api/chat/sessions`
+- [x] Start new session button
 
 ### 3.4 Components
 
@@ -323,20 +323,20 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 3.5 Chat Service & Hook
 
-- [ ] `frontend/services/chatService.ts` — `sendMessage()`, `getSessions()`, `getHistory()`
-- [ ] `frontend/hooks/useChat.ts` — manages messages state, loading state, session state
+- [x] `frontend/services/chatService.ts` — `sendMessage()`, `getSessions()`, `getHistory()`
+- [x] `frontend/hooks/useChat.ts` — manages messages state, loading state, session state
 
 ### 3.6 Connect Frontend to Backend
 
-- [ ] Wire `sendMessage()` to `POST /api/chat/message` (will return stub response in this phase)
-- [ ] Wire session list to `GET /api/chat/sessions`
-- [ ] Wire history load to `GET /api/history/{session_id}`
+- [x] Wire `sendMessage()` to `POST /api/chat/message` (will return stub response in this phase)
+- [x] Wire session list to `GET /api/chat/sessions`
+- [x] Wire history load to `GET /api/history/{session_id}`
 
 ### 3.7 Verification
 
-- [ ] Navigate register → login → chat flow without errors
-- [ ] Sending a message shows the stub response with typing indicator
-- [ ] Sessions appear in sidebar and history loads on click
+- [x] Navigate register → login → chat flow without errors
+- [x] Sending a message shows the stub response with typing indicator
+- [x] Sessions appear in sidebar and history loads on click
 
 **Deliverable:** Fully functional frontend UI connected to the backend, auth flow working, chat UI rendering stub responses.
 
