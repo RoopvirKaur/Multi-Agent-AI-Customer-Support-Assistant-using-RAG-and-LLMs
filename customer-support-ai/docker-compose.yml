@@ -46,7 +46,7 @@ services:
         condition: service_healthy
     volumes:
       - ./knowledge_base:/app/knowledge_base
-      - ./vectorstore:/app/vectorstore
+      - ./backend/vectorstore:/app/backend/vectorstore
 
   # --- Next.js Frontend ----------------------------------------
   frontend:
