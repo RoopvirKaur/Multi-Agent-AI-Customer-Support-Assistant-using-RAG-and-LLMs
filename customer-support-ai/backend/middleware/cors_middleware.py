@@ -21,30 +21,43 @@ def setup_cors(app: FastAPI) -> None:
     Attach CORS middleware to the FastAPI application.
     Allows requests from configured frontend origins including Render, Vercel, and local environments.
     """
-    origins = [
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    cors_origins_raw = os.getenv("CORS_ORIGINS", "")
+
+    raw_origins = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
-        FRONTEND_URL,
+        frontend_url,
     ]
 
-    # Parse comma-separated origins from CORS_ORIGINS environment variable
-    if CORS_ORIGINS_RAW:
-        for org in CORS_ORIGINS_RAW.split(","):
-            org = org.strip()
-            if org:
-                origins.append(org)
+    if cors_origins_raw:
+        for org in cors_origins_raw.split(","):
+            if org.strip():
+                raw_origins.append(org.strip())
 
-    # Filter out empty or duplicate origins
-    unique_origins = list(dict.fromkeys(filter(None, origins)))
+    normalized_origins = []
+    for org in raw_origins:
+        if not org:
+            continue
+        cleaned = org.strip().rstrip("/")
+        if not cleaned.startswith("http://") and not cleaned.startswith("https://"):
+            cleaned = f"https://{cleaned}"
+        normalized_origins.append(cleaned)
+        # Also include without https if local
+        if "localhost" in cleaned or "127.0.0.1" in cleaned:
+            normalized_origins.append(cleaned.replace("https://", "http://"))
+
+    unique_origins = list(dict.fromkeys(filter(None, normalized_origins)))
 
     app.add_middleware(
         CORSMiddleware,
         allow_origins=unique_origins,
-        allow_origin_regex=r"^https://.*\.vercel\.app$",
+        allow_origin_regex=r"https?://.*\.vercel\.app.*",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["*"],
     )
 
