@@ -7,6 +7,16 @@ Model: sentence-transformers/all-MiniLM-L6-v2 (384-dim vectors)
 import os
 from typing import List, Union
 import numpy as np
+import torch
+
+# Limit PyTorch CPU thread count to minimize RAM footprint on cloud containers
+try:
+    torch.set_num_threads(1)
+    if hasattr(torch, "set_num_interop_threads"):
+        torch.set_num_interop_threads(1)
+except Exception:
+    pass
+
 from sentence_transformers import SentenceTransformer
 
 DEFAULT_EMBEDDING_MODEL = os.getenv(
