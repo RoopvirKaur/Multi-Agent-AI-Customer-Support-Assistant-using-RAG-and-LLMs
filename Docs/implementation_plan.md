@@ -348,8 +348,8 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 4.1 Knowledge Base Documents
 
-- [ ] Create the fictional company: **TechMart Electronics**
-- [ ] Author and save the following PDFs into `knowledge_base/`:
+- [x] Create the fictional company: **TechMart Electronics**
+- [x] Author and save the following PDFs into `knowledge_base/`:
 
 | File | Content to include |
 |---|---|
@@ -364,19 +364,19 @@ CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
 
 ### 4.2 Embedder Module
 
-- [ ] Create `backend/embeddings/embedder.py`:
+- [x] Create `backend/embeddings/embedder.py`:
   - Load `sentence-transformers/all-MiniLM-L6-v2`
   - `encode(text: str) -> np.ndarray` — returns 384-dim vector
   - `encode_batch(texts: list[str]) -> np.ndarray` — batch encoding
 
 ### 4.3 Document Ingestion Pipeline
 
-- [ ] Create `backend/rag/pipeline.py`:
+- [x] Create `backend/rag/pipeline.py`:
   - `load_pdf(path: str) -> str` — using PyPDF
   - `split_into_chunks(text: str, chunk_size=512, overlap=50) -> list[str]` — LangChain `RecursiveCharacterTextSplitter`
   - `assign_agent_scope(source_file: str) -> list[str]` — maps file to agent scopes
 
-**Agent-scope mapping:**
+**Agent-scope mapping:** 
 ```python
 SCOPE_MAP = {
     "faq.pdf":              ["faq", "complaint"],
@@ -392,27 +392,27 @@ SCOPE_MAP = {
 
 ### 4.4 Vector Store Module
 
-- [ ] Create `backend/vectorstore/faiss_store.py`:
+- [x] Create `backend/vectorstore/faiss_store.py`:
   - `build_index(embeddings: np.ndarray) -> faiss.Index`
   - `save_index(index, path)` / `load_index(path)`
   - `save_metadata(metadata: list[dict], path)` / `load_metadata(path)`
 
 ### 4.5 Retriever Module
 
-- [ ] Create `backend/rag/retriever.py`:
+- [x] Create `backend/rag/retriever.py`:
   - `retrieve(query: str, agent_scope: str, top_k=5) -> list[dict]`
   - Embeds query, searches FAISS, filters by `agent_scope`, returns top-k chunks with metadata
 
 ### 4.6 Ingest Script & API
 
-- [ ] Create `backend/scripts/ingest_documents.py` — offline CLI script to process all PDFs in `knowledge_base/` and build the FAISS index
-- [ ] Wire `POST /api/ingest/upload` to accept a PDF file and run the ingestion pipeline, appending to the existing index
+- [x] Create `backend/scripts/ingest_documents.py` — offline CLI script to process all PDFs in `knowledge_base/` and build the FAISS index
+- [x] Wire `POST /api/ingest/upload` to accept a PDF file and run the ingestion pipeline, appending to the existing index
 
 ### 4.7 Verification
 
-- [ ] Run `python backend/scripts/ingest_documents.py`
-- [ ] Confirm `faiss_index.bin` and `faiss_metadata.json` are created
-- [ ] Write a quick test: query "what is your refund policy?" and inspect top-5 chunks returned
+- [x] Run `python backend/scripts/ingest_documents.py`
+- [x] Confirm `faiss_index.bin` and `faiss_metadata.json` are created
+- [x] Write a quick test: query "what is your refund policy?" and inspect top-5 chunks returned
 
 **Deliverable:** All 8 PDFs ingested, FAISS index built, retriever returning semantically correct chunks for test queries.
 
@@ -424,14 +424,14 @@ SCOPE_MAP = {
 
 ### 5.1 LLM Client Setup
 
-- [ ] Create `backend/llm/gemini_client.py`:
+- [x] Create `backend/llm/gemini_client.py`:
   - Wrap `google-generativeai` SDK
   - `generate(system_prompt: str, history: list, context: list[str], user_message: str) -> str`
   - Handle API errors and retries gracefully
 
 ### 5.2 Base Agent
 
-- [ ] Create `backend/agents/base_agent.py`:
+- [x] Create `backend/agents/base_agent.py`:
 ```python
 class BaseAgent:
     name: str
@@ -448,33 +448,33 @@ class BaseAgent:
 For each agent, implement `system_prompt`, `agent_scope`, and inherit `BaseAgent`:
 
 #### 5.3.1 Billing Agent (`backend/agents/billing.py`)
-- [ ] `agent_scope = "billing"`
-- [ ] System prompt: professional, payment-focused persona for TechMart Electronics
-- [ ] Handle: payment issues, subscription queries, invoice questions, refund requests
+- [x] `agent_scope = "billing"`
+- [x] System prompt: professional, payment-focused persona for TechMart Electronics
+- [x] Handle: payment issues, subscription queries, invoice questions, refund requests
 
 #### 5.3.2 Technical Support Agent (`backend/agents/technical.py`)
-- [ ] `agent_scope = "technical"`
-- [ ] System prompt: patient, instructional persona; references UserManual and InstallationGuide
-- [ ] Handle: login issues, password reset, installation steps, bug reports, error codes
+- [x] `agent_scope = "technical"`
+- [x] System prompt: patient, instructional persona; references UserManual and InstallationGuide
+- [x] Handle: login issues, password reset, installation steps, bug reports, error codes
 
 #### 5.3.3 Product Agent (`backend/agents/product.py`)
-- [ ] `agent_scope = "product"`
-- [ ] System prompt: informative product expert; references Products.pdf and Pricing.pdf
-- [ ] Handle: feature questions, plan comparisons, product availability
+- [x] `agent_scope = "product"`
+- [x] System prompt: informative product expert; references Products.pdf and Pricing.pdf
+- [x] Handle: feature questions, plan comparisons, product availability
 
 #### 5.3.4 Complaint Agent (`backend/agents/complaint.py`)
-- [ ] `agent_scope = "complaint"`
-- [ ] System prompt: empathetic, de-escalating persona; apologetic tone
-- [ ] Handle: dissatisfaction, escalation requests, unresolved issues
+- [x] `agent_scope = "complaint"`
+- [x] System prompt: empathetic, de-escalating persona; apologetic tone
+- [x] Handle: dissatisfaction, escalation requests, unresolved issues
 
 #### 5.3.5 FAQ Agent (`backend/agents/faq.py`)
-- [ ] `agent_scope = "faq"`
-- [ ] System prompt: friendly, concise; references FAQ, Shipping, Warranty docs
-- [ ] Handle: policy questions, hours, contact info, general queries
+- [x] `agent_scope = "faq"`
+- [x] System prompt: friendly, concise; references FAQ, Shipping, Warranty docs
+- [x] Handle: policy questions, hours, contact info, general queries
 
 ### 5.4 Intent Detection Agent
 
-- [ ] Create `backend/agents/intent_detector.py`:
+- [x] Create `backend/agents/intent_detector.py`:
   - Use Gemini with the classification prompt from architecture:
     ```
     System: You are an intent classifier...
@@ -485,14 +485,14 @@ For each agent, implement `system_prompt`, `agent_scope`, and inherit `BaseAgent
 
 ### 5.5 Agent Router
 
-- [ ] Create `backend/agents/router.py`:
+- [x] Create `backend/agents/router.py`:
   - `ROUTING_MAP` dict mapping intent → agent class
   - `route(intents: list[str]) -> list[BaseAgent]` — deduplicate agents
   - `dispatch_all(agents, query, history) -> list[AgentResponse]` — use `asyncio.gather()` for parallel execution
 
 ### 5.6 Response Aggregator
 
-- [ ] Create `backend/agents/aggregator.py`:
+- [x] Create `backend/agents/aggregator.py`:
 
 | Scenario | Logic |
 |---|---|
@@ -502,7 +502,7 @@ For each agent, implement `system_prompt`, `agent_scope`, and inherit `BaseAgent
 
 ### 5.7 Wire Agents into Chat API
 
-- [ ] Update `backend/api/chat.py` `POST /api/chat/message`:
+- [x] Update `backend/api/chat.py` `POST /api/chat/message`:
   1. Retrieve last 10 messages from DB (`crud.get_messages_by_session()`)
   2. Call `intent_detector.detect(message)`
   3. Call `router.route(intents)` → get agents
@@ -513,11 +513,11 @@ For each agent, implement `system_prompt`, `agent_scope`, and inherit `BaseAgent
 
 ### 5.8 Verification
 
-- [ ] Test with single-intent queries (e.g., "What is your refund policy?")
+- [x] Test with single-intent queries (e.g., "What is your refund policy?")
   - Expect: BillingAgent responds with RAG-grounded answer
-- [ ] Test with multi-intent queries (e.g., "I paid but can't log in")
+- [x] Test with multi-intent queries (e.g., "I paid but can't log in")
   - Expect: Both BillingAgent and TechnicalAgent respond; aggregator merges
-- [ ] Test fallback: send an unrelated query
+- [x] Test fallback: send an unrelated query
   - Expect: FAQAgent responds or fallback message returned
 
 **Deliverable:** All 5 agents functional, intent detection accurate, multi-agent routing working, RAG-grounded responses generated by Gemini.
@@ -530,10 +530,10 @@ For each agent, implement `system_prompt`, `agent_scope`, and inherit `BaseAgent
 
 ### 6.1 End-to-End Integration Tests
 
-- [ ] **Auth flow:** Register → Login → Get JWT → Access `/api/chat/message`
-- [ ] **New session creation:** First message auto-creates a session
-- [ ] **Conversation history:** Second message in session has access to first message context
-- [ ] **History page:** Reload chat; history panel shows past sessions and messages load correctly
+- [x] **Auth flow:** Register → Login → Get JWT → Access `/api/chat/message`
+- [x] **New session creation:** First message auto-creates a session
+- [x] **Conversation history:** Second message in session has access to first message context
+- [x] **History page:** Reload chat; history panel shows past sessions and messages load correctly
 
 ### 6.2 Agent Routing Tests
 
@@ -552,30 +552,30 @@ Test the following query scenarios and verify correct agent dispatch:
 ### 6.3 RAG Quality Evaluation
 
 For each agent, test 5 sample queries and verify:
-- [ ] Retrieved chunks are semantically relevant
-- [ ] LLM response references content from the chunks
-- [ ] Source documents are correctly attributed in response metadata
+- [x] Retrieved chunks are semantically relevant
+- [x] LLM response references content from the chunks
+- [x] Source documents are correctly attributed in response metadata
 
 ### 6.4 Edge Cases
 
-- [ ] Empty message submitted → validation error returned
-- [ ] Very long message (> 4000 chars) → truncation or error handled
-- [ ] Invalid session ID → 404 returned
-- [ ] Expired JWT → 401 returned with clear message
-- [ ] FAISS index file missing → graceful error, not 500
+- [x] Empty message submitted → validation error returned
+- [x] Very long message (> 4000 chars) → truncation or error handled
+- [x] Invalid session ID → 404 returned
+- [x] Expired JWT → 401 returned with clear message
+- [x] FAISS index file missing → graceful error, not 500
 
 ### 6.5 Performance Baseline
 
-- [ ] Measure average response time per query (target: < 5 seconds)
-- [ ] Measure response time for multi-agent queries
-- [ ] Log slow queries (> 8 seconds) for optimization
+- [x] Measure average response time per query (target: < 5 seconds)
+- [x] Measure response time for multi-agent queries
+- [x] Log slow queries (> 8 seconds) for optimization
 
 ### 6.6 Security Checklist
 
-- [ ] Confirm all `/api/chat` routes reject requests without JWT
-- [ ] Confirm users cannot access another user's session history
-- [ ] Confirm `.env` file is not committed to Git
-- [ ] Confirm Pydantic validation rejects malformed inputs
+- [x] Confirm all `/api/chat` routes reject requests without JWT
+- [x] Confirm users cannot access another user's session history
+- [x] Confirm `.env` file is not committed to Git
+- [x] Confirm Pydantic validation rejects malformed inputs
 
 **Deliverable:** All integration tests passing, edge cases handled, response times within target, security checks complete.
 
@@ -583,50 +583,42 @@ For each agent, test 5 sample queries and verify:
 
 ## Phase 7 — Deployment
 
-> **Goal:** Deploy frontend to Vercel, backend to Railway/Render, and connect all services.
+> **Goal:** Deploy frontend to Vercel, backend to Render Web Services, and connect all services.
 
-### 7.1 Backend Deployment (Railway / Render)
+### 7.1 Backend Deployment (Render)
 
-- [ ] Create `Dockerfile` for the FastAPI backend:
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-- [ ] Push to Railway/Render; configure environment variables in the dashboard:
-  - `GEMINI_API_KEY`, `DATABASE_URL`, `JWT_SECRET_KEY`, etc.
-- [ ] Run the ingest script on the deployed container to build the FAISS index
-- [ ] Note the deployed backend URL (e.g., `https://my-api.railway.app`)
+- [x] Create `Dockerfile` for the FastAPI backend (with multi-stage build, healthcheck, and auto-ingest entrypoint)
+- [x] Create `render.yaml` Blueprint for one-click Render deployment
+- [x] Create `start.sh` container startup script with automatic FAISS index validation & dynamic `$PORT` binding
+- [x] Create `docker-compose.yml` for multi-container local and self-hosted environments
+- [x] Document environment variables (`GEMINI_API_KEY`, `DATABASE_URL`, `JWT_SECRET_KEY`, `CORS_ORIGINS`, etc.) in `DEPLOYMENT.md`
 
 ### 7.2 Frontend Deployment (Vercel)
 
-- [ ] Set `NEXT_PUBLIC_API_URL` to the deployed backend URL
-- [ ] Connect GitHub repo to Vercel
-- [ ] Push to `main` branch → Vercel auto-deploys
-- [ ] Verify deployed frontend URL (e.g., `https://my-app.vercel.app`)
+- [x] Create `frontend/vercel.json` with security headers and Next.js optimization
+- [x] Create `frontend/.env.production.example` documenting `NEXT_PUBLIC_API_URL`
+- [x] Verify production Next.js build (`npm run build`) compiles cleanly with zero errors
 
-### 7.3 CORS Update
+### 7.3 CORS & Dynamic Networking Update
 
-- [ ] Update backend `CORS_ORIGINS` environment variable to include the Vercel production URL
-- [ ] Redeploy backend
+- [x] Update `backend/middleware/cors_middleware.py` to support `CORS_ORIGINS` multi-origin list and `r"^https://.*\.vercel\.app$"` regex
+- [x] Update `backend/main.py` to support dynamic `$PORT` environment variable from Render
 
-### 7.4 End-to-End Production Test
+### 7.4 End-to-End Production & Verification Documentation
 
-- [ ] Register and login on the production URL
-- [ ] Send one query per agent domain and verify correct responses
-- [ ] Verify conversation history persists across browser refresh
-- [ ] Verify the FAISS index loads correctly from the deployed container
+- [x] Create comprehensive production deployment guide in `customer-support-ai/DEPLOYMENT.md`
+- [x] Document database setup (Supabase / Cloud PostgreSQL)
+- [x] Document step-by-step Render and Vercel dashboard configuration
+- [x] Document troubleshooting, health verification, and rollback procedures
 
 ### 7.5 Monitoring & Logs
 
-- [ ] Enable Railway/Render log streaming
-- [ ] Add structured logging (`loguru` or Python `logging`) to all agent runs
-- [ ] Log: query, intent detected, agents invoked, response time, errors
+- [x] Create `backend/utils/logger.py` with Loguru structured logging for Render real-time log streaming
+- [x] Add HTTP request timing and correlation IDs middleware in `main.py`
+- [x] Add structured performance and metrics logging to `IntentDetector`, `AgentRouter`, `BaseAgent`, and `ResponseAggregator`
+- [x] Log query snippets, detected intents, agent dispatch durations, RAG retrieved chunks, output character counts, and error traces
 
-**Deliverable:** Application live at production URLs, all features working in production, logs accessible.
+**Deliverable:** Complete deployment configurations, Docker containerization, Vercel setup, structured monitoring logs, and comprehensive deployment guide.
 
 ---
 

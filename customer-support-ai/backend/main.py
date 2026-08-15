@@ -18,9 +18,16 @@ from sqlalchemy import text
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
+import time
+import uuid
+from backend.utils.logger import get_logger, setup_root_logging
 from backend.database.connection import engine, AsyncSessionLocal
 from backend.middleware.cors_middleware import setup_cors
 from backend.api import auth_router, chat_router, history_router, ingest_router
+
+# Initialize structured logging
+setup_root_logging()
+logger = get_logger("fastapi_app")
 
 # Rate limiter setup: 30 requests per minute per IP
 limiter = Limiter(key_func=get_remote_address, default_limits=["30/minute"])
@@ -33,9 +40,7 @@ async def lifespan(app: FastAPI):
     - Tests database connectivity on startup
     - Closes connection pools on shutdown
     """
-    print("\n" + "=" * 60)
-    print("🚀 Starting Multi-Agent AI Customer Support API...")
-    print("=" * 60)
+    logger.info("🚀 Starting Multi-Agent AI Customer Support API...")
 
     # Test database connectivity
     if AsyncSessionLocal:
@@ -43,19 +48,19 @@ async def lifespan(app: FastAPI):
             async with AsyncSessionLocal() as session:
                 result = await session.execute(text("SELECT 1"))
                 if result.scalar() == 1:
-                    print("✅ Database connection verified successfully.")
+                    logger.info("✅ Database connection verified successfully.")
         except Exception as e:
-            print(f"⚠️ Warning: Database connection check failed on startup: {e}")
+            logger.warning(f"⚠️ Warning: Database connection check failed on startup: {e}")
     else:
-        print("⚠️ Warning: Database session factory is not initialized.")
+        logger.warning("⚠️ Warning: Database session factory is not initialized.")
 
     yield
 
     # Shutdown
-    print("\n🛑 Shutting down Multi-Agent AI Customer Support API...")
+    logger.info("🛑 Shutting down Multi-Agent AI Customer Support API...")
     if engine:
         await engine.dispose()
-        print("✅ Database engine disposed.")
+        logger.info("✅ Database engine disposed.")
 
 
 # Initialize FastAPI application
@@ -70,6 +75,25 @@ app = FastAPI(
     redoc_url="/redoc",
     lifespan=lifespan,
 )
+
+# HTTP Request Logging & Timing Middleware
+@app.middleware("http")
+async def log_requests_middleware(request: Request, call_next):
+    req_id = str(uuid.uuid4())[:8]
+    start_time = time.time()
+    client_host = request.client.host if request.client else "unknown"
+
+    response = await call_next(request)
+
+    duration_ms = (time.time() - start_time) * 1000
+    status_code = response.status_code
+
+    # Structured request log
+    logger.info(
+        f"{request.method} {request.url.path} -> {status_code} | "
+        f"{duration_ms:.2f}ms | client={client_host} | req_id={req_id}"
+    )
+    return response
 
 # Configure Rate Limiting
 app.state.limiter = limiter
@@ -117,4 +141,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("backend.main:app", host="0.0.0.0", port=port, reload=True)

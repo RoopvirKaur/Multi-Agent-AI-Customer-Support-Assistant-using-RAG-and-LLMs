@@ -1,0 +1,37 @@
+# ============================================================
+# Render Blueprint Specification (render.yaml)
+# Multi-Agent AI Customer Support Assistant Backend
+# Deploy with one click on Render: https://render.com/docs/blueprint-spec
+# ============================================================
+
+services:
+  - type: web
+    name: techmart-support-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: standard
+    region: oregon
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: EMBEDDING_MODEL
+        value: sentence-transformers/all-MiniLM-L6-v2
+      - key: FAISS_INDEX_PATH
+        value: ./vectorstore/faiss_index.bin
+      - key: FAISS_METADATA_PATH
+        value: ./vectorstore/faiss_metadata.json
+      - key: FRONTEND_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

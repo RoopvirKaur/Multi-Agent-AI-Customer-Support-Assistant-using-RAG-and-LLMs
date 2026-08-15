@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { User, Bot, FileText, Check, Copy } from "lucide-react";
+import { User, Bot, Check, Copy } from "lucide-react";
 import AgentBadge from "./AgentBadge";
 import { ChatMessage } from "@/services/chatService";
 
@@ -73,26 +73,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
           <div className="prose prose-invert max-w-none text-sm leading-relaxed space-y-2">
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
-
-          {/* Source Citations Accordion */}
-          {message.sources && message.sources.length > 0 && (
-            <div className="mt-3 pt-3 border-t border-slate-700/50">
-              <p className="text-[11px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">
-                Sources Cited:
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {message.sources.map((src, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-[11px] text-indigo-300"
-                  >
-                    <FileText className="w-3 h-3 text-indigo-400" />
-                    {src.document} {src.page ? `(p. ${src.page})` : ""}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Quick Copy Button */}
           <button

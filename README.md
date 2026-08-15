@@ -13,6 +13,9 @@ A production-ready, multi-agent customer support assistant powered by **Google G
   - [`Docs/architecture.md`](Docs/architecture.md): Complete architecture document
   - [`Docs/implementation_plan.md`](Docs/implementation_plan.md): 8-Phase implementation roadmap
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Deployment
 
-See [`customer-support-ai/README.md`](customer-support-ai/README.md) for detailed setup and run instructions.
+- **Local Setup & Development:** See [`customer-support-ai/README.md`](customer-support-ai/README.md)
+- **Production Deployment (Render & Vercel):** See [`customer-support-ai/DEPLOYMENT.md`](customer-support-ai/DEPLOYMENT.md)
+- **Docker Compose:** Run `docker-compose up --build` inside `customer-support-ai/`
+

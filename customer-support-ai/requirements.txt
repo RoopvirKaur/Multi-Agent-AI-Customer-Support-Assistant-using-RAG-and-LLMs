@@ -37,6 +37,7 @@ sentence-transformers
 
 # --- Document Processing ------------------------------------
 pypdf
+pdfplumber
 pandas
 
 # --- Rate Limiting ------------------------------------------

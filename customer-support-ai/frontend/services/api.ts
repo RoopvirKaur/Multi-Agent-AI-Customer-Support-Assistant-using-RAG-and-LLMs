@@ -17,4 +17,25 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Response interceptor — handle 401 token expiry cleanly
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      typeof window !== "undefined"
+    ) {
+      const isAuthEndpoint =
+        error.config?.url?.includes("/api/auth/login") ||
+        error.config?.url?.includes("/api/auth/register");
+      if (!isAuthEndpoint) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_profile");
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
