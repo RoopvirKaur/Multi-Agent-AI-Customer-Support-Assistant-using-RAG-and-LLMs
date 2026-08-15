@@ -28,7 +28,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY backend ./backend
 COPY knowledge_base ./knowledge_base
 COPY datasets ./datasets
-COPY vectorstore ./vectorstore
 COPY .env.example .env.example
 COPY start.sh .
 

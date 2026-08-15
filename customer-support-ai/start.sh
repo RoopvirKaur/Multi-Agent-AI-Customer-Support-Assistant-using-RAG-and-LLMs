@@ -6,8 +6,8 @@ echo "🚀 Initializing TechMart Multi-Agent AI Support Backend"
 echo "=========================================================="
 
 PORT=${PORT:-8000}
-INDEX_FILE="vectorstore/faiss_index.bin"
-METADATA_FILE="vectorstore/faiss_metadata.json"
+INDEX_FILE="backend/vectorstore/faiss_index.bin"
+METADATA_FILE="backend/vectorstore/faiss_metadata.json"
 
 # Check if FAISS index and metadata exist; if not, automatically ingest documents
 if [ ! -f "$INDEX_FILE" ] || [ ! -f "$METADATA_FILE" ]; then
