@@ -19,6 +19,7 @@ alembic
 # --- Data Validation ----------------------------------------
 pydantic
 pydantic-settings
+email-validator
 
 # --- Environment --------------------------------------------
 python-dotenv
@@ -36,6 +37,7 @@ sentence-transformers
 
 # --- Document Processing ------------------------------------
 pypdf
+pdfplumber
 pandas
 
 # --- Rate Limiting ------------------------------------------

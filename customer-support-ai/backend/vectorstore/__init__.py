@@ -1,3 +1,3 @@
-# vectorstore package
-# FAISS index and metadata will be stored here.
-# These binary files are gitignored — run the ingest script to regenerate them.
+from .faiss_store import FAISSStore, faiss_store, get_faiss_store
+
+__all__ = ["FAISSStore", "faiss_store", "get_faiss_store"]
