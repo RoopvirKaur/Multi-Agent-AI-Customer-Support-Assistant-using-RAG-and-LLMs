@@ -37,22 +37,23 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["30/minute"])
 async def lifespan(app: FastAPI):
     """
     Application lifespan context manager:
-    - Tests database connectivity on startup
+    - Tests database connectivity and creates tables if they don't exist
     - Closes connection pools on shutdown
     """
     logger.info("🚀 Starting Multi-Agent AI Customer Support API...")
 
-    # Test database connectivity
-    if AsyncSessionLocal:
+    # Test database connectivity and auto-create schema tables
+    if engine:
         try:
-            async with AsyncSessionLocal() as session:
-                result = await session.execute(text("SELECT 1"))
-                if result.scalar() == 1:
-                    logger.info("✅ Database connection verified successfully.")
+            from backend.database.connection import Base
+            import backend.database.models  # noqa: F401
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+            logger.info("✅ Database connection verified & schema tables initialized.")
         except Exception as e:
-            logger.warning(f"⚠️ Warning: Database connection check failed on startup: {e}")
+            logger.warning(f"⚠️ Warning: Database connection / table initialization check: {e}")
     else:
-        logger.warning("⚠️ Warning: Database session factory is not initialized.")
+        logger.warning("⚠️ Warning: Database engine is not initialized.")
 
     yield
 
@@ -76,6 +77,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Configure CORS as primary middleware
+setup_cors(app)
+
 # HTTP Request Logging & Timing Middleware
 @app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
@@ -98,9 +102,6 @@ async def log_requests_middleware(request: Request, call_next):
 # Configure Rate Limiting
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
-# Configure CORS
-setup_cors(app)
 
 # Register API Routers under /api prefix
 app.include_router(auth_router, prefix="/api")
