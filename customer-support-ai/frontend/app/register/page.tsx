@@ -50,7 +50,9 @@ export default function RegisterPage() {
       console.error("Registration error:", err);
       setError(
         err?.response?.data?.detail ||
-          "Failed to create account. Email may already be registered."
+          (err?.message === "Network Error"
+            ? "Cannot connect to server. Please check database configuration."
+            : "Failed to create account. Please try again.")
       );
     } finally {
       setIsSubmitting(false);

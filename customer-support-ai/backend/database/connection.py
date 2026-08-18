@@ -49,6 +49,10 @@ ssl_ctx.check_hostname = False
 ssl_ctx.verify_mode = ssl.CERT_NONE
 
 if DATABASE_URL:
+    is_cloud_db = any(
+        k in DATABASE_URL
+        for k in ["supabase", "pooler", "neon.tech", "render.com", "rds.amazonaws.com"]
+    )
     engine = create_async_engine(
         DATABASE_URL,
         echo=False,
@@ -56,9 +60,7 @@ if DATABASE_URL:
         pool_pre_ping=True,      # Automatically reconnect on dropped connections
         pool_size=10,            # Sensible default pool size for FastAPI
         max_overflow=20,
-        connect_args={
-            "ssl": ssl_ctx
-        } if ("supabase.co" in DATABASE_URL or "pooler.supabase.com" in DATABASE_URL) else {}
+        connect_args={"ssl": ssl_ctx} if is_cloud_db else {},
     )
 
     AsyncSessionLocal = async_sessionmaker(

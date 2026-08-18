@@ -103,6 +103,23 @@ async def log_requests_middleware(request: Request, call_next):
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+
+# Global Exception Handler (Ensures CORS headers and clean JSON on unexpected 500 errors)
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(
+        f"❌ Unhandled Exception on {request.method} {request.url.path}: {exc}",
+        exc_info=True,
+    )
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "detail": f"Internal server error: {str(exc)}",
+            "path": request.url.path,
+        },
+    )
+
+
 # Register API Routers under /api prefix
 app.include_router(auth_router, prefix="/api")
 app.include_router(chat_router, prefix="/api")
