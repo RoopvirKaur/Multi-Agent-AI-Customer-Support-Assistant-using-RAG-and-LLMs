@@ -63,13 +63,17 @@ export function useChat() {
     async (sessionId: string) => {
       try {
         await chatService.deleteSession(sessionId);
+      } catch (err: any) {
+        // If 404, it was already deleted on the backend
+        if (err?.response?.status !== 404) {
+          console.error("Failed to delete session:", err);
+          setError("Failed to delete conversation.");
+        }
+      } finally {
         setSessions((prev) => prev.filter((s) => s.id !== sessionId));
         if (activeSessionId === sessionId) {
           startNewChat();
         }
-      } catch (err) {
-        console.error("Failed to delete session:", err);
-        setError("Failed to delete conversation.");
       }
     },
     [activeSessionId, startNewChat]
