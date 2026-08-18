@@ -38,7 +38,9 @@ export default function LoginPage() {
       console.error("Login error:", err);
       setError(
         err?.response?.data?.detail ||
-          "Failed to sign in. Please verify your credentials."
+          (err?.message === "Network Error"
+            ? "Cannot connect to server. Please check database configuration."
+            : "Failed to sign in. Please verify your credentials.")
       );
     } finally {
       setIsSubmitting(false);
