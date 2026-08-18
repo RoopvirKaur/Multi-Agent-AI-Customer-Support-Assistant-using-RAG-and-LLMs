@@ -18,7 +18,7 @@ from sqlalchemy.orm import DeclarativeBase
 env_path = Path(__file__).resolve().parent.parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
-DATABASE_URL = os.getenv("DATABASE_URL", "")
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip().strip("\"'").strip()
 
 # Normalize URL for SQLAlchemy + asyncpg
 if DATABASE_URL.startswith("postgres://"):
@@ -26,12 +26,15 @@ if DATABASE_URL.startswith("postgres://"):
 elif DATABASE_URL.startswith("postgresql://") and not DATABASE_URL.startswith("postgresql+asyncpg://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
+# Clean any trailing whitespace or newlines that may have been pasted into the dashboard
+DATABASE_URL = DATABASE_URL.rstrip("\r\n \t")
+
 # Strip any sslmode query params which asyncpg doesn't accept directly in the URL query string
 if "?" in DATABASE_URL:
     base_url, query_params = DATABASE_URL.split("?", 1)
     # Filter out sslmode param if present
     params = [p for p in query_params.split("&") if not p.startswith("sslmode=")]
-    DATABASE_URL = base_url + ("?" + "&".join(params) if params else "")
+    DATABASE_URL = base_url.rstrip("\r\n \t") + ("?" + "&".join(params) if params else "")
 
 # Base declarative class for ORM models
 class Base(DeclarativeBase):
