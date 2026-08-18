@@ -21,11 +21,11 @@ if not logger.handlers:
     logging.basicConfig(level=logging.INFO)
 
 DEFAULT_MODEL_CANDIDATES = [
-    "gemini-flash-lite-latest",
-    "gemini-3.5-flash-lite",
-    "gemini-3.1-flash-lite",
-    "gemini-3.5-flash",
-    "gemini-flash-latest",
+    "gemini-1.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-pro",
+    "gemini-2.0-flash-lite",
+    "gemini-1.5-flash-8b",
 ]
 
 
@@ -36,7 +36,7 @@ class GeminiClient:
     """
 
     def __init__(self, api_key: Optional[str] = None, model_name: Optional[str] = None):
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
+        self.api_key = api_key or os.getenv("GEMINI_API_KEY", "").strip()
         if not self.api_key:
             logger.warning("GEMINI_API_KEY is not set in environment or constructor.")
         else:
@@ -118,6 +118,15 @@ class GeminiClient:
         """
         Synchronously call Gemini with retry and model fallback.
         """
+        if not self.api_key:
+            self.api_key = os.getenv("GEMINI_API_KEY", "").strip()
+            if self.api_key:
+                genai.configure(api_key=self.api_key)
+            else:
+                raise RuntimeError(
+                    "GEMINI_API_KEY is not set. Please set GEMINI_API_KEY in your Render environment variables."
+                )
+
         full_prompt = self.format_prompt(
             system_prompt=system_prompt,
             user_message=user_message,
