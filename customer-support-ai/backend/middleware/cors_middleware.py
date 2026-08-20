@@ -29,6 +29,7 @@ def setup_cors(app: FastAPI) -> None:
         "http://127.0.0.1:3000",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
+        "https://multi-agent-ai-customer-support-ass-eight.vercel.app",
         frontend_url,
     ]
 
@@ -54,7 +55,7 @@ def setup_cors(app: FastAPI) -> None:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=unique_origins,
-        allow_origin_regex=r"https?://.*\.vercel\.app.*",
+        allow_origin_regex=r"https?://.*",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
