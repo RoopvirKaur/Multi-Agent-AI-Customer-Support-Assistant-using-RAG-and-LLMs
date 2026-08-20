@@ -5,7 +5,7 @@ CORS Middleware Configuration
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 # Load environment configuration
@@ -14,6 +14,24 @@ load_dotenv(dotenv_path=env_path)
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 CORS_ORIGINS_RAW = os.getenv("CORS_ORIGINS", "")
+
+
+def get_cors_headers(request: Request) -> dict:
+    """
+    Generate safe CORS response headers for custom exception handlers.
+    Mirrors the incoming request Origin if present to ensure cross-origin
+    error responses (401, 404, 422, 500) pass browser CORS policy without
+    triggering invalid wildcard '*' + credentials failures.
+    """
+    origin = request.headers.get("origin")
+    if not origin:
+        return {}
+    return {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*",
+    }
 
 
 def setup_cors(app: FastAPI) -> None:
@@ -60,5 +78,7 @@ def setup_cors(app: FastAPI) -> None:
         allow_methods=["*"],
         allow_headers=["*"],
         expose_headers=["*"],
+        max_age=600,
     )
+
 

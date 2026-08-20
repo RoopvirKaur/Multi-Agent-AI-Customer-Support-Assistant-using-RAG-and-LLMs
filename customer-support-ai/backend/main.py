@@ -22,7 +22,7 @@ import time
 import uuid
 from backend.utils.logger import get_logger, setup_root_logging
 from backend.database.connection import engine, AsyncSessionLocal
-from backend.middleware.cors_middleware import setup_cors
+from backend.middleware.cors_middleware import setup_cors, get_cors_headers
 from backend.api import auth_router, chat_router, history_router, ingest_router
 
 # Initialize structured logging
@@ -86,6 +86,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Configure CORS as primary outermost middleware BEFORE logging / HTTP middleware
+setup_cors(app)
+
 # HTTP Request Logging & Timing Middleware
 @app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
@@ -105,12 +108,18 @@ async def log_requests_middleware(request: Request, call_next):
     )
     return response
 
-# Configure CORS as primary outermost middleware
-setup_cors(app)
-
 # Configure Rate Limiting
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+@app.exception_handler(RateLimitExceeded)
+async def custom_rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    headers = get_cors_headers(request)
+    return JSONResponse(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        content={"detail": f"Rate limit exceeded. {exc.detail}"},
+        headers=headers,
+    )
 
 
 # Global Exception Handler (Ensures CORS headers and clean JSON on unexpected errors)
@@ -120,35 +129,27 @@ async def global_exception_handler(request: Request, exc: Exception):
         f"❌ Unhandled Exception on {request.method} {request.url.path}: {exc}",
         exc_info=True,
     )
-    origin = request.headers.get("origin") or "*"
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "detail": f"Backend Error: {str(exc)}",
             "path": request.url.path,
         },
-        headers={
-            "Access-Control-Allow-Origin": origin,
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "*",
-            "Access-Control-Allow-Headers": "*",
-        },
+        headers=get_cors_headers(request),
     )
 
 
 @app.exception_handler(HTTPException)
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
-    origin = request.headers.get("origin") or "*"
+    headers = get_cors_headers(request)
+    if exc.headers:
+        headers.update(exc.headers)
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail},
-        headers={
-            "Access-Control-Allow-Origin": origin,
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "*",
-            "Access-Control-Allow-Headers": "*",
-        },
+        headers=headers,
     )
+
 
 
 # Register API Routers under /api prefix
