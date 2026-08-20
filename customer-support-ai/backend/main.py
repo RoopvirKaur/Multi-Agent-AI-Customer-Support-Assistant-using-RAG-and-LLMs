@@ -55,6 +55,15 @@ async def lifespan(app: FastAPI):
     else:
         logger.warning("⚠️ Warning: Database engine is not initialized.")
 
+    # Pre-warm Embedding Model and FAISS Vector Store
+    try:
+        from backend.rag.retriever import get_retriever
+        retriever = get_retriever()
+        retriever.ensure_index_loaded()
+        logger.info("✅ FAISS vectorstore loaded & ready.")
+    except Exception as e:
+        logger.warning(f"⚠️ Warning: Could not pre-load vectorstore: {e}")
+
     yield
 
     # Shutdown
