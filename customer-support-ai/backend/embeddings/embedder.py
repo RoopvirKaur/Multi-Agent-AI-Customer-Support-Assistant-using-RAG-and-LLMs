@@ -44,7 +44,12 @@ class Embedder:
     def model(self) -> SentenceTransformer:
         if self._model is None:
             print(f"Loading embedding model: {self.model_name}...")
-            self._model = SentenceTransformer(self.model_name)
+            import gc
+            gc.collect()
+            with torch.no_grad():
+                self._model = SentenceTransformer(self.model_name, device="cpu")
+                self._model.eval()
+            gc.collect()
             print("Embedding model loaded successfully.")
         return self._model
 
@@ -55,11 +60,13 @@ class Embedder:
         if not text or not text.strip():
             return np.zeros((384,), dtype=np.float32)
 
-        vector = self.model.encode(
-            text.strip(),
-            normalize_embeddings=normalize,
-            show_progress_bar=False,
-        )
+        with torch.no_grad():
+            vector = self.model.encode(
+                text.strip(),
+                normalize_embeddings=normalize,
+                show_progress_bar=False,
+                convert_to_numpy=True,
+            )
         return np.array(vector, dtype=np.float32)
 
     def encode_batch(

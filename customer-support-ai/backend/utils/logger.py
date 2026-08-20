@@ -125,9 +125,15 @@ class InterceptHandler(logging.Handler):
 
 
 def setup_root_logging() -> None:
-    """Redirect standard library logging to Loguru."""
+    """Redirect standard library logging to Loguru and suppress noisy third-party HTTP logs."""
     logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
+    
+    # Keep application servers routed to Loguru
     for name in ["uvicorn", "uvicorn.access", "uvicorn.error", "fastapi"]:
         log = logging.getLogger(name)
         log.handlers = [InterceptHandler()]
         log.propagate = False
+
+    # Suppress harmless internal HEAD/GET probe logs from HuggingFace & HTTP libraries
+    for noisy_lib in ["urllib3", "httpx", "httpcore", "huggingface_hub", "transformers", "sentence_transformers"]:
+        logging.getLogger(noisy_lib).setLevel(logging.WARNING)
