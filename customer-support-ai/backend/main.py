@@ -77,9 +77,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configure CORS as primary middleware
-setup_cors(app)
-
 # HTTP Request Logging & Timing Middleware
 @app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
@@ -98,6 +95,9 @@ async def log_requests_middleware(request: Request, call_next):
         f"{duration_ms:.2f}ms | client={client_host} | req_id={req_id}"
     )
     return response
+
+# Configure CORS as primary outermost middleware
+setup_cors(app)
 
 # Configure Rate Limiting
 app.state.limiter = limiter
