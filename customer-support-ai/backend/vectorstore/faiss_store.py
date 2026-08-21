@@ -38,7 +38,7 @@ class FAISSStore:
 
     def __init__(
         self,
-        dimension: int = 1024,
+        dimension: int = 10000,
         index_path: Optional[Path] = None,
         metadata_path: Optional[Path] = None,
     ):
@@ -71,14 +71,16 @@ class FAISSStore:
     def build_index(self, embeddings: np.ndarray) -> faiss.IndexFlatIP:
         """
         Build a fresh FAISS IndexFlatIP (cosine similarity on normalized vectors).
+        Dynamically adapts index dimension to match the embeddings feature count.
         """
-        if embeddings.ndim != 2 or embeddings.shape[1] != self.dimension:
-            raise ValueError(
-                f"Expected embeddings shape (N, {self.dimension}), got {embeddings.shape}"
-            )
+        if embeddings.ndim != 2:
+            raise ValueError(f"Expected 2D embeddings matrix, got {embeddings.shape}")
+
+        num_vectors, dim = embeddings.shape
+        self.dimension = dim
 
         embeddings_f32 = np.ascontiguousarray(embeddings, dtype=np.float32)
-        index = faiss.IndexFlatIP(self.dimension)
+        index = faiss.IndexFlatIP(dim)
         index.add(embeddings_f32)
         self.index = index
         return index

@@ -116,6 +116,31 @@ class BaseAgent(ABC):
             temperature=0.3,
         )
 
+    def _format_clean_fallback(self, chunks: List[Dict[str, Any]]) -> str:
+        """
+        Format retrieved context chunks into clean, elegant Markdown customer support response.
+        """
+        if not chunks:
+            return (
+                f"I apologize, but I couldn't locate specific details for your query in our records. "
+                f"Please allow our {self.name.capitalize()} support team to assist you further."
+            )
+
+        items = []
+        for idx, chunk in enumerate(chunks[:3], 1):
+            doc = chunk.get("document", "Record")
+            text = chunk.get("text", "").strip()
+            lines = [line.strip() for line in text.split("\n") if line.strip() and not line.startswith("Source Dataset:")]
+            body = "\n".join(lines)
+            items.append(f"**Item {idx} — {doc}**:\n{body}")
+
+        formatted = "\n\n".join(items)
+        return (
+            f"Here are the relevant details retrieved from our verified records:\n\n"
+            f"{formatted}\n\n"
+            f"Please let me know if you need any additional clarification!"
+        )
+
     async def run(
         self,
         query: str,
@@ -143,18 +168,7 @@ class BaseAgent(ABC):
         except Exception as e:
             status = f"error: {e}"
             logger.error(f"Agent '{self.name}' generation failed: {e}")
-            if chunks:
-                top_texts = [c.get("text", "") for c in chunks[:3] if c.get("text")]
-                joined_context = "\n\n".join(top_texts)
-                response_text = (
-                    f"Here is the relevant information retrieved from our verified records:\n\n"
-                    f"{joined_context}"
-                )
-            else:
-                response_text = (
-                    f"I encountered a temporary system limit while processing your request. "
-                    f"Please allow our {self.name.capitalize()} team to assist you further or ask your question again in a moment."
-                )
+            response_text = self._format_clean_fallback(chunks)
 
         total_ms = (time.time() - start_time) * 1000
         logger.log_agent_execution(
@@ -192,18 +206,7 @@ class BaseAgent(ABC):
             )
         except Exception as e:
             logger.error(f"Agent '{self.name}' sync generation failed: {e}")
-            if chunks:
-                top_texts = [c.get("text", "") for c in chunks[:3] if c.get("text")]
-                joined_context = "\n\n".join(top_texts)
-                response_text = (
-                    f"Here is the relevant information retrieved from our verified records:\n\n"
-                    f"{joined_context}"
-                )
-            else:
-                response_text = (
-                    f"I encountered a temporary system limit while processing your request. "
-                    f"Please allow our {self.name.capitalize()} team to assist you further or ask your question again in a moment."
-                )
+            response_text = self._format_clean_fallback(chunks)
 
         return AgentResponse(
             text=response_text,
