@@ -22,11 +22,17 @@ class Retriever:
 
     def ensure_index_loaded(self) -> bool:
         """
-        Ensure the FAISS index and metadata are loaded in memory.
+        Ensure the FAISS index and metadata are loaded in memory and fit TF-IDF embedder.
         """
+        loaded = True
         if self.store.index is None or len(self.store.metadata) == 0:
-            return self.store.load()
-        return True
+            loaded = self.store.load()
+
+        if loaded and self.store.metadata and not getattr(self.embedder, "is_fitted", True):
+            texts = [m.get("text", "") for m in self.store.metadata if m.get("text")]
+            if texts:
+                self.embedder.fit_corpus(texts)
+        return loaded
 
     def retrieve(
         self,

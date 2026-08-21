@@ -38,7 +38,7 @@ class FAISSStore:
 
     def __init__(
         self,
-        dimension: int = 384,
+        dimension: int = 1024,
         index_path: Optional[Path] = None,
         metadata_path: Optional[Path] = None,
     ):
