@@ -61,11 +61,14 @@ async def lifespan(app: FastAPI):
     # Pre-warm Embedding Model and FAISS Vector Store
     try:
         from backend.rag.retriever import get_retriever
+        from backend.embeddings.embedder import get_embedder
         retriever = get_retriever()
         retriever.ensure_index_loaded()
-        logger.info("✅ FAISS vectorstore loaded & ready.")
+        embedder = get_embedder()
+        _ = embedder.model  # Pre-warm SentenceTransformer in memory at startup
+        logger.info("✅ FAISS vectorstore & SentenceTransformer model pre-warmed & ready.")
     except Exception as e:
-        logger.warning(f"⚠️ Warning: Could not pre-load vectorstore: {e}")
+        logger.warning(f"⚠️ Warning: Could not pre-load vectorstore / embedder: {e}")
 
     yield
 
