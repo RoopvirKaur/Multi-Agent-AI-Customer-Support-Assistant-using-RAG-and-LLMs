@@ -115,6 +115,26 @@ class IntentDetector:
 
         return ["faq"]
 
+    def _fallback_keyword_detection(self, message: str) -> List[str]:
+        """Smart rule-based fallback detection when LLM is unavailable or rate-limited."""
+        msg_lower = message.lower()
+        detected = set()
+
+        if any(w in msg_lower for w in ["refund", "paid", "subscription", "price", "pricing", "invoice", "charge", "cost", "billing"]):
+            detected.add("billing")
+        if any(w in msg_lower for w in ["install", "app", "phone", "locked", "inaccessible", "setup", "bug", "troubleshoot"]):
+            detected.add("technical")
+        if any(w in msg_lower for w in ["pro", "plan", "feature", "spec", "model", "tier", "comparison"]):
+            detected.add("product")
+        if any(w in msg_lower for w in ["unhappy", "complaint", "complaints", "upset", "angry", "terrible", "disappointed"]):
+            detected.add("complaint")
+        if any(w in msg_lower for w in ["hour", "hours", "contact", "warranty", "store", "address", "shipping"]):
+            detected.add("faq")
+
+        if not detected:
+            detected.add("faq")
+        return list(detected)
+
     def detect(
         self,
         message: str,
@@ -126,9 +146,8 @@ class IntentDetector:
         if not message or not message.strip():
             return ["faq"]
 
-        # Fast keyword check for explicit complaint requests
         msg_lower = message.lower()
-        if "complaint" in msg_lower or "complaints" in msg_lower:
+        if "complaint" in msg_lower and "refund" not in msg_lower and "paid" not in msg_lower:
             return ["complaint"]
 
         try:
@@ -141,8 +160,8 @@ class IntentDetector:
             )
             return self._parse_llm_output(raw_response)
         except Exception as e:
-            logger.error(f"Intent detection LLM call failed: {e}. Falling back to ['complaint' if 'complaint' in message else 'faq'].")
-            return ["complaint"] if "complaint" in message.lower() else ["faq"]
+            logger.error(f"Intent detection LLM call failed: {e}. Utilizing smart keyword fallback.")
+            return self._fallback_keyword_detection(message)
 
     async def adetect(
         self,
@@ -155,9 +174,8 @@ class IntentDetector:
         if not message or not message.strip():
             return ["faq"]
 
-        # Fast keyword check for explicit complaint requests
         msg_lower = message.lower()
-        if "complaint" in msg_lower or "complaints" in msg_lower:
+        if "complaint" in msg_lower and "refund" not in msg_lower and "paid" not in msg_lower:
             return ["complaint"]
 
         try:
@@ -170,8 +188,8 @@ class IntentDetector:
             )
             return self._parse_llm_output(raw_response)
         except Exception as e:
-            logger.error(f"Async intent detection LLM call failed: {e}. Falling back to ['complaint' if 'complaint' in message else 'faq'].")
-            return ["complaint"] if "complaint" in message.lower() else ["faq"]
+            logger.error(f"Async intent detection LLM call failed: {e}. Utilizing smart keyword fallback.")
+            return self._fallback_keyword_detection(message)
 
 
 # Global singleton

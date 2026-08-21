@@ -54,17 +54,51 @@ def base_table_style(header_rows=1):
         ("FONTNAME", (0, 0), (-1, header_rows - 1), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, header_rows - 1), 9),
         ("ALIGN", (0, 0), (-1, header_rows - 1), "CENTER"),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("FONTNAME", (0, header_rows), (-1, -1), "Helvetica"),
         ("FONTSIZE", (0, header_rows), (-1, -1), 8),
         ("ROWBACKGROUNDS", (0, header_rows), (-1, -1), [TABLE_ROW_COLOR_A, TABLE_ROW_COLOR_B]),
         ("GRID", (0, 0), (-1, -1), 0.5, TABLE_BORDER),
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-        ("WORDWRAP", (0, 0), (-1, -1), True),
+        ("LEFTPADDING", (0, 0), (-1, -1), 5),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
     ])
+
+
+tbl_hdr_style = ParagraphStyle(
+    "RegenHdrStyle",
+    parent=styles["Normal"],
+    fontName="Helvetica-Bold",
+    fontSize=8.5,
+    leading=11,
+    textColor=colors.white,
+    alignment=TA_LEFT,
+)
+
+tbl_cell_style = ParagraphStyle(
+    "RegenCellStyle",
+    parent=styles["Normal"],
+    fontName="Helvetica",
+    fontSize=8.0,
+    leading=11,
+    textColor=colors.HexColor("#1f2937"),
+    alignment=TA_LEFT,
+)
+
+def make_wrapped_table(data, col_widths, header_rows=1):
+    processed = []
+    for r_idx, row in enumerate(data):
+        row_out = []
+        for cell in row:
+            st = tbl_hdr_style if r_idx < header_rows else tbl_cell_style
+            cell_str = str(cell).replace("\n", "<br/>")
+            row_out.append(Paragraph(cell_str, st))
+        processed.append(row_out)
+
+    tbl = Table(processed, colWidths=col_widths)
+    tbl.setStyle(base_table_style(header_rows=header_rows))
+    return tbl
 
 
 # =====================================================================
@@ -96,8 +130,7 @@ def build_pricing_pdf():
         ["TechMart SmartSensor Trio\n(Door/Window Pack)", "TM-SST-04", "$59.99", "$14.99 / 2 yrs"],
         ["TechMart PowerPulse 65W\nGaN Charger", "TM-PP65-05", "$39.99", "N/A (1-yr standard)"],
     ]
-    hw_table = Table(hw_data, colWidths=[5.5*cm, 3*cm, 4*cm, 4*cm])
-    hw_table.setStyle(base_table_style())
+    hw_table = make_wrapped_table(hw_data, [5.2*cm, 2.8*cm, 4.3*cm, 4.3*cm])
     story.append(hw_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -118,8 +151,7 @@ def build_pricing_pdf():
         ["Pro Premium", "$9.99 / mo", "$99.99 / yr",
          "60-day cloud recording (unlimited devices), Person & Pet AI detection, 24/7 cellular backup"],
     ]
-    sub_table = Table(sub_data, colWidths=[3*cm, 3*cm, 3.5*cm, 7*cm])
-    sub_table.setStyle(base_table_style())
+    sub_table = make_wrapped_table(sub_data, [3*cm, 3*cm, 3.5*cm, 7.1*cm])
     story.append(sub_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -148,8 +180,7 @@ def build_pricing_pdf():
         ["50 – 99 units", "15% off MSRP", "All hardware SKUs", "Net-30"],
         ["100+ units", "20% off MSRP + free shipping", "All hardware SKUs", "Net-45 / PO required"],
     ]
-    vol_table = Table(vol_data, colWidths=[4.5*cm, 3.5*cm, 4*cm, 4.5*cm])
-    vol_table.setStyle(base_table_style())
+    vol_table = make_wrapped_table(vol_data, [4.2*cm, 3.5*cm, 4.2*cm, 4.7*cm])
     story.append(vol_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -201,8 +232,7 @@ def build_shipping_pdf():
         ["Priority Overnight", "Next business day by 3 PM", "$24.99 flat rate", "$19.99 flat rate"],
         ["Saturday Express Delivery", "Saturday delivery", "$29.99 flat rate", "$29.99 flat rate"],
     ]
-    ship_table = Table(ship_data, colWidths=[4.5*cm, 4*cm, 4*cm, 4*cm])
-    ship_table.setStyle(base_table_style())
+    ship_table = make_wrapped_table(ship_data, [4.5*cm, 4*cm, 4*cm, 4.1*cm])
     story.append(ship_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -238,7 +268,7 @@ def build_shipping_pdf():
         ["Asia Pacific", "FedEx International Priority", "5 - 10 business days", "$29.99"],
         ["Rest of World", "DHL Worldwide", "7 - 14 business days", "$34.99"],
     ]
-    intl_table = Table(intl_data, colWidths=[4*cm, 4.5*cm, 4.5*cm, 3.5*cm])
+    intl_table = make_wrapped_table(intl_data, [3.8*cm, 4.5*cm, 4.5*cm, 3.8*cm])
     intl_table.setStyle(base_table_style())
     story.append(intl_table)
     story.append(Spacer(1, 0.3*cm))
@@ -316,8 +346,7 @@ def build_user_manual_pdf():
         ["Blinking White", "Bluetooth Pairing Mode", "Open TechMart App and tap 'Add New Device'."],
         ["Off (No Light)", "Device Powered Off / No Power", "Check power adapter connection and outlet."],
     ]
-    led_table = Table(led_data, colWidths=[5*cm, 5*cm, 6.5*cm])
-    led_table.setStyle(base_table_style())
+    led_table = make_wrapped_table(led_data, [4.5*cm, 4.5*cm, 7.6*cm])
     story.append(led_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -347,8 +376,7 @@ def build_user_manual_pdf():
          "Firmware Update Failed\nCause: Interrupted OTA update.",
          "Do not unplug during update. If stuck, hold reset button 15 sec to force re-download."],
     ]
-    err_table = Table(err_data, colWidths=[2*cm, 6*cm, 8.5*cm])
-    err_table.setStyle(base_table_style())
+    err_table = make_wrapped_table(err_data, [2.2*cm, 5.8*cm, 8.6*cm])
     story.append(err_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -377,8 +405,7 @@ def build_user_manual_pdf():
          "Hold tamper button on back for 5 seconds until LED flashes rapidly.",
          "~10 sec. Re-add sensor to SmartHub Pro after reset."],
     ]
-    reset_table = Table(reset_data, colWidths=[3*cm, 8*cm, 5.5*cm])
-    reset_table.setStyle(base_table_style())
+    reset_table = make_wrapped_table(reset_data, [3.2*cm, 7.8*cm, 5.6*cm])
     story.append(reset_table)
     story.append(Spacer(1, 0.4*cm))
 
@@ -398,28 +425,21 @@ def build_user_manual_pdf():
         ["SmartSensor Trio", "v1.9.4 (2026-05)", "TechMart App v2.8+", "Yes (via SmartHub)"],
         ["PowerPulse 65W", "N/A (no firmware)", "N/A", "N/A"],
     ]
-    fw_table = Table(fw_data, colWidths=[4*cm, 4*cm, 4*cm, 4.5*cm])
-    fw_table.setStyle(base_table_style())
+    fw_table = make_wrapped_table(fw_data, [4*cm, 4*cm, 4*cm, 4.6*cm])
     story.append(fw_table)
     story.append(Spacer(1, 0.4*cm))
 
-    # Section 5: Warranty & Support
-    story.append(Paragraph("5. Support Contact & Warranty Claim Process", h1))
-    story.append(Paragraph(
-        "TechMart Electronics provides multi-channel customer support for all hardware products.",
-        body
-    ))
-
+    # Section 5: Technical Support Channels & Contact Info
+    story.append(Paragraph("5. Technical Support Channels & Contact Info", h1))
     sup_data = [
-        ["Support Channel", "Availability", "Contact / Link"],
+        ["Channel", "Availability", "Contact / Reference"],
         ["Live Chat", "Mon - Fri, 9 AM - 6 PM EST", "techmart.com/support"],
         ["Email Support", "24/7 (response within 24h)", "support@techmart.com"],
         ["Phone Support", "Mon - Fri, 9 AM - 6 PM EST", "1-800-TECHMART"],
         ["Community Forum", "24/7", "community.techmart.com"],
         ["Warranty Claims", "Mon - Fri, 9 AM - 5 PM EST", "warranty@techmart.com"],
     ]
-    sup_table = Table(sup_data, colWidths=[4.5*cm, 5*cm, 7*cm])
-    sup_table.setStyle(base_table_style())
+    sup_table = make_wrapped_table(sup_data, [4.5*cm, 5*cm, 7.1*cm])
     story.append(sup_table)
 
     doc.build(story)

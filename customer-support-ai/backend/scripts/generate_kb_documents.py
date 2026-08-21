@@ -89,6 +89,24 @@ def build_pdf(filename: str, title: str, subtitle: str, sections: list):
         spaceAfter=4,
     )
 
+    tbl_hdr_style = ParagraphStyle(
+        "DocTblHdr",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=8.5,
+        leading=11,
+        textColor=colors.HexColor("#1e1b4b"),
+    )
+
+    tbl_cell_style = ParagraphStyle(
+        "DocTblCell",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=8.0,
+        leading=11,
+        textColor=colors.HexColor("#1f2937"),
+    )
+
     story = []
 
     # Title & Subtitle Banner
@@ -111,16 +129,29 @@ def build_pdf(filename: str, title: str, subtitle: str, sections: list):
 
         table_data = sec.get("table")
         if table_data:
-            tbl = Table(table_data, colWidths=sec.get("colWidths", [160, 370]))
+            raw_widths = sec.get("colWidths", [160, 370])
+            total_w = sum(raw_widths)
+            max_w = 530.0
+            col_widths = [w * (max_w / total_w) for w in raw_widths] if total_w > max_w else raw_widths
+
+            processed_table_data = []
+            for r_idx, row in enumerate(table_data):
+                processed_row = []
+                for cell in row:
+                    st = tbl_hdr_style if r_idx == 0 else tbl_cell_style
+                    cell_str = str(cell).replace("\n", "<br/>")
+                    processed_row.append(Paragraph(cell_str, st))
+                processed_table_data.append(processed_row)
+
+            tbl = Table(processed_table_data, colWidths=col_widths)
             tbl.setStyle(
                 TableStyle(
                     [
                         ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e0e7ff")),
-                        ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#1e1b4b")),
-                        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                        ("FONTSIZE", (0, 0), (-1, -1), 8.5),
                         ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
                         ("TOPPADDING", (0, 0), (-1, -1), 5),
+                        ("LEFTPADDING", (0, 0), (-1, -1), 4),
+                        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
                         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
                         ("VALIGN", (0, 0), (-1, -1), "TOP"),
                     ]

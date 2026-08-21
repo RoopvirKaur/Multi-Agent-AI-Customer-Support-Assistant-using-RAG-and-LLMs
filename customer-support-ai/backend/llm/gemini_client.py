@@ -23,8 +23,6 @@ if not logger.handlers:
 DEFAULT_MODEL_CANDIDATES = [
     "gemini-1.5-flash",
     "gemini-2.0-flash",
-    "gemini-1.5-flash-8b",
-    "gemini-1.5-pro",
     "gemini-flash-latest",
 ]
 
@@ -113,7 +111,7 @@ class GeminiClient:
         context: Optional[List[Dict[str, Any]]] = None,
         temperature: float = 0.3,
         max_output_tokens: Optional[int] = 1024,
-        max_retries: int = 2,
+        max_retries: int = 3,
     ) -> str:
         """
         Synchronously call Gemini with retry and model fallback.
@@ -164,16 +162,19 @@ class GeminiClient:
                         raise ValueError("Empty response text from Gemini API")
                 except Exception as e:
                     last_error = e
-                    # If 429 quota or 404 not found, immediately fall to next model candidate
                     err_str = str(e).lower()
-                    if "429" in err_str or "quota" in err_str or "404" in err_str or "not found" in err_str:
-                        logger.warning(f"Model '{model_name}' hit rate limit/error. Switching candidate...")
-                        break
 
-                    if attempt < max_retries:
-                        time.sleep(1.0 * attempt)
-                    else:
+                    if "429" in err_str or "quota" in err_str or "resource_exhausted" in err_str:
+                        logger.warning(f"Model '{model_name}' hit rate limit (attempt {attempt}/{max_retries}). Backing off...")
+                        time.sleep(2.5 * attempt)
+                    elif "404" in err_str:
+                        logger.warning(f"Model '{model_name}' returned 404. Switching candidate...")
                         break
+                    else:
+                        if attempt < max_retries:
+                            time.sleep(1.0 * attempt)
+                        else:
+                            break
 
         logger.error(f"All Gemini generation attempts failed. Last error: {last_error}")
         raise RuntimeError(f"Gemini API generation failed: {last_error}")

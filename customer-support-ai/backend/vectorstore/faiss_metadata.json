@@ -143,7 +143,7 @@
       "product",
       "faq"
     ],
-    "text": "TechMart Electronics — Hardware Pricing, Subscriptions &\nVolume Discounts\nOfficial Corporate Policy & Reference Documentation | Doc ID: TM-CAT-PRICING-2026\n1. Hardware Product Lineup & Retail Pricing (2026 Catalog)\nOfficial MSRP pricing for all TechMart flagship consumer electronics and smart home devices.\n2. SmartHub Cloud Intelligence Subscription Tiers\nEnhance your SmartHub Pro with cloud event storage, multi-camera AI recognition, and remote cellular backup.\nclip buffer\nalerts"
+    "text": "TechMart Electronics — Hardware Pricing, Subscriptions &\nVolume Discounts\nOfficial Corporate Policy & Reference Documentation | Doc ID: TM-CAT-PRICING-2026\n1. Hardware Product Lineup & Retail Pricing (2026 Catalog)\nOfficial MSRP pricing for all TechMart flagship consumer electronics and smart home devices.\n2. SmartHub Cloud Intelligence Subscription Tiers\nEnhance your SmartHub Pro with cloud event storage, multi-camera AI recognition, and remote cellular backup.\n3. Bundle Packages & Promotional Discounts"
   },
   {
     "chunk_id": "pricing_p1_c1",
@@ -155,7 +155,7 @@
       "product",
       "faq"
     ],
-    "text": "clip buffer\nalerts\nPet AI detection, 24/7 cellular backup\n3. Bundle Packages & Promotional Discounts\n(cid:127) Home Security Essentials Bundle: SmartHub Pro + 2 SmartSensor Trios + 1-yr Plus Plan for $279.99 (Save $60).\n(cid:127) Audiophile Home Theater Bundle: VisionStream 4K + 2 SoundWave 500 units for $369.99 (Save $59.98).\n(cid:127) Work From Home Bundle: SmartHub Pro + PowerPulse 65W Charger for $219.99 (Save $19.99).\n4. Corporate & Volume Purchase Discount Tiers"
+    "text": "3. Bundle Packages & Promotional Discounts\n(cid:127) Home Security Essentials Bundle: SmartHub Pro + 2 SmartSensor Trios + 1-yr Plus Plan for $279.99 (Save $60).\n(cid:127) Audiophile Home Theater Bundle: VisionStream 4K + 2 SoundWave 500 units for $369.99 (Save $59.98).\n(cid:127) Work From Home Bundle: SmartHub Pro + PowerPulse 65W Charger for $219.99 (Save $19.99).\n4. Corporate & Volume Purchase Discount Tiers"
   },
   {
     "chunk_id": "pricing_p1_c2",
@@ -203,7 +203,7 @@
       "product",
       "faq"
     ],
-    "text": "| Tier         | Monthly Price | Annual Price (Save 17%) | Key Features                                            |\n| ------------ | ------------- | ----------------------- | ------------------------------------------------------- |\n| Basic (Free) | $0.00         | $0.00                   | Live 1080p streaming, local SD card recording, 24h cli  |\n| Plus Plan    | $4.99 / mo    | $49.99 / yr             | 30-day cloud recording (up to 3 devices), AI motion ale |"
+    "text": "| Tier         | Monthly Price | Annual Price (Save 17%) | Key Features                                                                                |\n| ------------ | ------------- | ----------------------- | ------------------------------------------------------------------------------------------- |\n| Basic (Free) | $0.00         | $0.00                   | Live 1080p streaming, local SD card recording, 24h clip buffer                              |"
   },
   {
     "chunk_id": "pricing_p1_c6",
@@ -215,7 +215,7 @@
       "product",
       "faq"
     ],
-    "text": "| Pro Premium  | $9.99 / mo    | $99.99 / yr             | 60-day cloud recording (unlimited devices), Person &    |"
+    "text": "| Plus Plan    | $4.99 / mo    | $49.99 / yr             | 30-day cloud recording (up to 3 devices), AI motion alerts                                  |\n| Pro Premium  | $9.99 / mo    | $99.99 / yr             | 60-day cloud recording (unlimited devices), Person & Pet AI detection, 24/7 cellular backup |"
   },
   {
     "chunk_id": "pricing_p1_c7",
@@ -251,7 +251,7 @@
       "product",
       "faq"
     ],
-    "text": "| 20 – 49 units | 10% off MSRP             | All hardware SKUs     | Net-30               |\n| ------------- | ------------------------ | --------------------- | -------------------- |\n| 50 – 99 units | 15% off MSRP             | All hardware SKUs     | Net-30               |\n| 100+ units    | 20% off MSRP + free ship | pinAgll hardware SKUs | Net-45 / PO required |"
+    "text": "| 20 – 49 units | 10% off MSRP                 | All hardware SKUs | Net-30               |\n| ------------- | ---------------------------- | ----------------- | -------------------- |\n| 50 – 99 units | 15% off MSRP                 | All hardware SKUs | Net-30               |\n| 100+ units    | 20% off MSRP + free shipping | All hardware SKUs | Net-45 / PO required |"
   },
   {
     "chunk_id": "products_p1_c0",
@@ -434,7 +434,7 @@
       "faq",
       "billing"
     ],
-    "text": "4. Shipment Tracking & Delivery Confirmation\nA shipment confirmation email with carrier tracking number is sent automatically within 1 hour of dispatch. Track your\norder at: orders.techmart.com/track or directly on the carrier's website.\nReal-time GPS tracking is available for Priority Overnight and Saturday Express shipments.\n(cid:127)"
+    "text": "4. Shipment Tracking & Delivery Confirmation\nA shipment confirmation email with carrier tracking number is sent automatically within 1 hour of dispatch. Track your\norder at: orders.techmart.com/track or directly on the carrier's website.\nReal-time GPS tracking is available for Priority Overnight and Saturday Express shipments.\n(cid:127)\nDelivery photo confirmation is provided for all FedEx and UPS residential deliveries.\n(cid:127)"
   },
   {
     "chunk_id": "shippingpolicy_p1_c4",
@@ -445,7 +445,7 @@
       "faq",
       "billing"
     ],
-    "text": "| Shipping Tier             | Estimated Transit Time    | Cost (Orders < $50) | Cost (Orders >= $50) |\n| ------------------------- | ------------------------- | ------------------- | -------------------- |\n| Standard Ground           | 3 - 5 business days       | $5.99 flat rate     | FREE ($0.00)         |\n| Expedited 2-Day           | 2 business days           | $12.99 flat rate    | $8.99 discounted     |"
+    "text": "(cid:127)\nIf a package is marked as delivered but not received, contact support@techmart.com within 72 hours. We will\n(cid:127)\nopen a carrier claim on your behalf."
   },
   {
     "chunk_id": "shippingpolicy_p1_c5",
@@ -456,7 +456,7 @@
       "faq",
       "billing"
     ],
-    "text": "| Priority Overnight        | Next business day by 3 PM | $24.99 flat rate    | $19.99 flat rate     |\n| Saturday Express Delivery | Saturday delivery         | $29.99 flat rate    | $29.99 flat rate     |"
+    "text": "| Shipping Tier             | Estimated Transit Time    | Cost (Orders < $50) | Cost (Orders >= $50) |\n| ------------------------- | ------------------------- | ------------------- | -------------------- |\n| Standard Ground           | 3 - 5 business days       | $5.99 flat rate     | FREE ($0.00)         |\n| Expedited 2-Day           | 2 business days           | $12.99 flat rate    | $8.99 discounted     |"
   },
   {
     "chunk_id": "shippingpolicy_p1_c6",
@@ -467,7 +467,7 @@
       "faq",
       "billing"
     ],
-    "text": "| Region              | Carrier                      | Estimated Delivery   | Approx. Starting Cost |\n| ------------------- | ---------------------------- | -------------------- | --------------------- |\n| Canada              | FedEx International          | 3 - 5 business days  | $9.99                 |\n| United Kingdom / EU | DHL Express                  | 4 - 7 business days  | $19.99                |\n| Australia / NZ      | DHL Express                  | 5 - 9 business days  | $24.99                |"
+    "text": "| Priority Overnight        | Next business day by 3 PM | $24.99 flat rate    | $19.99 flat rate     |\n| Saturday Express Delivery | Saturday delivery         | $29.99 flat rate    | $29.99 flat rate     |"
   },
   {
     "chunk_id": "shippingpolicy_p1_c7",
@@ -478,18 +478,18 @@
       "faq",
       "billing"
     ],
-    "text": "| Asia Pacific        | FedEx International Priority | 5 - 10 business days | $29.99                |\n| Rest of World       | DHL Worldwide                | 7 - 14 business days | $34.99                |"
+    "text": "| Region              | Carrier                      | Estimated Delivery   | Approx. Starting Cost |\n| ------------------- | ---------------------------- | -------------------- | --------------------- |\n| Canada              | FedEx International          | 3 - 5 business days  | $9.99                 |\n| United Kingdom / EU | DHL Express                  | 4 - 7 business days  | $19.99                |\n| Australia / NZ      | DHL Express                  | 5 - 9 business days  | $24.99                |"
   },
   {
-    "chunk_id": "shippingpolicy_p2_c8",
+    "chunk_id": "shippingpolicy_p1_c8",
     "document": "ShippingPolicy.pdf",
     "document_title": "ShippingPolicy",
-    "page": 2,
+    "page": 1,
     "scopes": [
       "faq",
       "billing"
     ],
-    "text": "(cid:127) Delivery photo confirmation is provided for all FedEx and UPS residential deliveries.\n(cid:127) If a package is marked as delivered but not received, contact support@techmart.com within 72 hours. We will\nopen a carrier claim on your behalf.\n5. Damaged or Lost Shipments\nAll TechMart shipments are fully insured up to their retail value. If your order arrives damaged or is confirmed lost by\nthe carrier:\n(cid:127) Contact support@techmart.com within 5 business days of the expected delivery date."
+    "text": "| Asia Pacific        | FedEx International Priority | 5 - 10 business days | $29.99                |\n| Rest of World       | DHL Worldwide                | 7 - 14 business days | $34.99                |"
   },
   {
     "chunk_id": "shippingpolicy_p2_c9",
@@ -500,7 +500,7 @@
       "faq",
       "billing"
     ],
-    "text": "(cid:127) Provide your order number, photos of damaged packaging/items (if applicable).\n(cid:127) TechMart will ship a free replacement within 2 business days or issue a full refund (your choice) once the carrier\nclaim is filed."
+    "text": "5. Damaged or Lost Shipments\nAll TechMart shipments are fully insured up to their retail value. If your order arrives damaged or is confirmed lost by\nthe carrier:\n(cid:127) Contact support@techmart.com within 5 business days of the expected delivery date.\n(cid:127) Provide your order number, photos of damaged packaging/items (if applicable).\n(cid:127) TechMart will ship a free replacement within 2 business days or issue a full refund (your choice) once the carrier\nclaim is filed."
   },
   {
     "chunk_id": "usermanual_p1_c0",
@@ -510,7 +510,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "TechMart Electronics — Comprehensive User Manual &\nTroubleshooting Reference\nOfficial Corporate Policy & Reference Documentation | Doc ID: TM-UM-FULL-2026\n1. SmartHub Pro LED Status Light Meanings\nThe multi-color front LED indicator conveys the operational status of your SmartHub Pro gateway.\n2. Common Error Codes & Troubleshooting Steps\nSettings > Account.\nSmartPlug as a mesh repeater.\nTry a different port.\nre-pair device.\nFormat Card.\nforce re-download.\n3. Factory Reset Procedures"
+    "text": "TechMart Electronics — Comprehensive User Manual &\nTroubleshooting Reference\nOfficial Corporate Policy & Reference Documentation | Doc ID: TM-UM-FULL-2026\n1. SmartHub Pro LED Status Light Meanings\nThe multi-color front LED indicator conveys the operational status of your SmartHub Pro gateway.\n2. Common Error Codes & Troubleshooting Steps\n3. Factory Reset Procedures\nIf experiencing persistent operational anomalies, a factory reset returns the hardware to out-of-the-box defaults. All"
   },
   {
     "chunk_id": "usermanual_p1_c1",
@@ -520,7 +520,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "force re-download.\n3. Factory Reset Procedures\nIf experiencing persistent operational anomalies, a factory reset returns the hardware to out-of-the-box defaults. All\nlocal settings, paired devices, and stored Wi-Fi credentials will be erased.\nre-added in TechMart App."
+    "text": "local settings, paired devices, and stored Wi-Fi credentials will be erased."
   },
   {
     "chunk_id": "usermanual_p1_c2",
@@ -560,7 +560,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| Error Code | Error Name & Cause                                                                | Resolution Steps                                                     |\n| ---------- | --------------------------------------------------------------------------------- | -------------------------------------------------------------------- |\n| E-101      | Authentication Failure Cause: Cloud account credentials mismatch.                 | Re-enter your TechMart account password in the mobile app Setti      |"
+    "text": "| Error Code | Error Name & Cause                                                                | Resolution Steps                                                                      |\n| ---------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |"
   },
   {
     "chunk_id": "usermanual_p1_c6",
@@ -570,7 +570,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| E-204      | Zigbee Signal Weak Cause: Sensor too far from SmartHub.                           | Move sensor within 10m of SmartHub or add a TechMart SmartPlu        |\n| E-305      | HDMI Handshake Error (VisionStream) Cause: HDCP version mismatch.                 | Verify TV HDMI port supports HDCP 2.2/2.3. Replace HDMI cable        |\n| E-409      | Bluetooth Audio Stutter (SoundWave) Cause: Bluetooth congestion or stale pairing. | Hold Bluetooth + Volume Down for 7 sec to clear paired list, then r  |"
+    "text": "| E-101      | Authentication Failure Cause: Cloud account credentials mismatch.                 | Re-enter your TechMart account password in the mobile app Settings > Account.         |\n| E-204      | Zigbee Signal Weak Cause: Sensor too far from SmartHub.                           | Move sensor within 10m of SmartHub or add a TechMart SmartPlug as a mesh repeater.    |"
   },
   {
     "chunk_id": "usermanual_p1_c7",
@@ -580,7 +580,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| E-512      | SD Card Write Failure Cause: SD card full or corrupted.                           | Format SD card (FAT32, max 256GB) in Settings > Storage > For        |\n| E-615      | Firmware Update Failed Cause: Interrupted OTA update.                             | Do not unplug during update. If stuck, hold reset button 15 sec to f |"
+    "text": "| E-305      | HDMI Handshake Error (VisionStream) Cause: HDCP version mismatch.                 | Verify TV HDMI port supports HDCP 2.2/2.3. Replace HDMI cable. Try a different port.  |\n| E-409      | Bluetooth Audio Stutter (SoundWave) Cause: Bluetooth congestion or stale pairing. | Hold Bluetooth + Volume Down for 7 sec to clear paired list, then re-pair device.     |"
   },
   {
     "chunk_id": "usermanual_p1_c8",
@@ -590,27 +590,27 @@
     "scopes": [
       "technical"
     ],
-    "text": "| Device       | Factory Reset Method                                          | Duration & Notes                                           |\n| ------------ | ------------------------------------------------------------- | ---------------------------------------------------------- |\n| SmartHub Pro | Hold recessed RESET button (pin) for 15 seconds until LED fla | sh~e9s0 rseedc .3 A tilml peasir.ed devices must be re-add |"
+    "text": "| E-512      | SD Card Write Failure Cause: SD card full or corrupted.                           | Format SD card (FAT32, max 256GB) in Settings > Storage > Format Card.                |\n| E-615      | Firmware Update Failed Cause: Interrupted OTA update.                             | Do not unplug during update. If stuck, hold reset button 15 sec to force re-download. |"
   },
   {
-    "chunk_id": "usermanual_p2_c9",
+    "chunk_id": "usermanual_p1_c9",
     "document": "UserManual.pdf",
     "document_title": "UserManual",
-    "page": 2,
+    "page": 1,
     "scopes": [
       "technical"
     ],
-    "text": "Wi-Fi config remains if assigned via app.\nre-signed in after reset.\nafter reset.\n4. Firmware Updates & App Requirements\nAll TechMart devices receive automatic Over-The-Air (OTA) firmware updates when connected to Wi-Fi. Updates are\nreleased on the second Tuesday of each month.\n5. Support Contact & Warranty Claim Process\nTechMart Electronics provides multi-channel customer support for all hardware products."
+    "text": "| Device        | Factory Reset Method                                                           | Duration & Notes                                                                   |\n| ------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |"
   },
   {
-    "chunk_id": "usermanual_p2_c10",
+    "chunk_id": "usermanual_p1_c10",
     "document": "UserManual.pdf",
     "document_title": "UserManual",
-    "page": 2,
+    "page": 1,
     "scopes": [
       "technical"
     ],
-    "text": "| SoundWave 500    | Hold Volume Up + Power simultaneously for 10 seconds.         | ~30 sec. All Bluetooth pairings cleared. Wi  |\n| ---------------- | ------------------------------------------------------------- | -------------------------------------------- |\n| VisionStream 4K  | Settings > System > Factory Reset in the on-screen menu.      | ~2 min. Google/Amazon account must be        |"
+    "text": "| SmartHub Pro  | Hold recessed RESET button (pin) for 15 seconds until LED flashes red 3 times. | ~90 sec. All paired devices must be re-added in TechMart App.                      |\n| SoundWave 500 | Hold Volume Up + Power simultaneously for 10 seconds.                          | ~30 sec. All Bluetooth pairings cleared. Wi-Fi config remains if assigned via app. |"
   },
   {
     "chunk_id": "usermanual_p2_c11",
@@ -620,7 +620,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| SmartSensor Trio | Hold tamper button on back for 5 seconds until LED flashes ra | pid~l1y0. sec. Re-add sensor to SmartHub Pro |"
+    "text": "4. Firmware Updates & App Requirements\nAll TechMart devices receive automatic Over-The-Air (OTA) firmware updates when connected to Wi-Fi. Updates are\nreleased on the second Tuesday of each month.\n5. Technical Support Channels & Contact Info"
   },
   {
     "chunk_id": "usermanual_p2_c12",
@@ -630,7 +630,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| Device           | Current Firmware Version | Minimum App Version   | Auto-Update        |\n| ---------------- | ------------------------ | --------------------- | ------------------ |\n| SmartHub Pro     | v4.7.2 (2026-07)         | TechMart App v3.2+    | Yes                |\n| SoundWave 500    | v2.3.1 (2026-06)         | TechMart App v3.0+    | Yes                |\n| VisionStream 4K  | v6.1.0 (2026-07)         | Android 10+ / iOS 15+ | Yes                |"
+    "text": "| VisionStream 4K  | Settings > System > Factory Reset in the on-screen menu.            | ~2 min. Google/Amazon account must be re-signed in after reset. |\n| ---------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- |\n| SmartSensor Trio | Hold tamper button on back for 5 seconds until LED flashes rapidly. | ~10 sec. Re-add sensor to SmartHub Pro after reset.             |"
   },
   {
     "chunk_id": "usermanual_p2_c13",
@@ -640,7 +640,7 @@
     "scopes": [
       "technical"
     ],
-    "text": "| SmartSensor Trio | v1.9.4 (2026-05)         | TechMart App v2.8+    | Yes (via SmartHub) |\n| PowerPulse 65W   | N/A (no firmware)        | N/A                   | N/A                |"
+    "text": "| Device           | Current Firmware Version | Minimum App Version   | Auto-Update        |\n| ---------------- | ------------------------ | --------------------- | ------------------ |\n| SmartHub Pro     | v4.7.2 (2026-07)         | TechMart App v3.2+    | Yes                |\n| SoundWave 500    | v2.3.1 (2026-06)         | TechMart App v3.0+    | Yes                |\n| VisionStream 4K  | v6.1.0 (2026-07)         | Android 10+ / iOS 15+ | Yes                |"
   },
   {
     "chunk_id": "usermanual_p2_c14",
@@ -650,10 +650,20 @@
     "scopes": [
       "technical"
     ],
-    "text": "| Support Channel | Availability               | Contact / Link         |\n| --------------- | -------------------------- | ---------------------- |\n| Live Chat       | Mon - Fri, 9 AM - 6 PM EST | techmart.com/support   |\n| Email Support   | 24/7 (response within 24h) | support@techmart.com   |\n| Phone Support   | Mon - Fri, 9 AM - 6 PM EST | 1-800-TECHMART         |\n| Community Forum | 24/7                       | community.techmart.com |"
+    "text": "| SmartSensor Trio | v1.9.4 (2026-05)         | TechMart App v2.8+    | Yes (via SmartHub) |\n| PowerPulse 65W   | N/A (no firmware)        | N/A                   | N/A                |"
   },
   {
     "chunk_id": "usermanual_p2_c15",
+    "document": "UserManual.pdf",
+    "document_title": "UserManual",
+    "page": 2,
+    "scopes": [
+      "technical"
+    ],
+    "text": "| Channel         | Availability               | Contact / Reference    |\n| --------------- | -------------------------- | ---------------------- |\n| Live Chat       | Mon - Fri, 9 AM - 6 PM EST | techmart.com/support   |\n| Email Support   | 24/7 (response within 24h) | support@techmart.com   |\n| Phone Support   | Mon - Fri, 9 AM - 6 PM EST | 1-800-TECHMART         |\n| Community Forum | 24/7                       | community.techmart.com |"
+  },
+  {
+    "chunk_id": "usermanual_p2_c16",
     "document": "UserManual.pdf",
     "document_title": "UserManual",
     "page": 2,
@@ -726,7 +736,7 @@
       "faq",
       "technical"
     ],
-    "text": "| Feature                                | Standard 1-Year Warranty | TechMart Care+ (2-Year Plan)    |\n| -------------------------------------- | ------------------------ | ------------------------------- |\n| Hardware Defects Coverage              | 1 Year                   | 2 Full Years                    |\n| Accidental Damage Protection (Drops/Sp | illNs)ot Covered         | Covered ($29 incident fee)      |"
+    "text": "| Feature                                     | Standard 1-Year Warranty | TechMart Care+ (2-Year Plan)    |\n| ------------------------------------------- | ------------------------ | ------------------------------- |\n| Hardware Defects Coverage                   | 1 Year                   | 2 Full Years                    |\n| Accidental Damage Protection (Drops/Spills) | Not Covered              | Covered ($29 incident fee)      |"
   },
   {
     "chunk_id": "warranty_p1_c6",
@@ -737,7 +747,7 @@
       "faq",
       "technical"
     ],
-    "text": "| Express Priority Replacement           | Standard RMA (7-10 days) | Advanced Replacement (Next-Day) |\n| Battery Capacity Coverage (< 80%)      | Not Covered              | Free OEM Battery Replacement    |\n| 24/7 Dedicated Priority Support Line   | Standard Queue           | VIP Priority Routing            |"
+    "text": "| Express Priority Replacement                | Standard RMA (7-10 days) | Advanced Replacement (Next-Day) |\n| Battery Capacity Coverage (< 80%)           | Not Covered              | Free OEM Battery Replacement    |\n| 24/7 Dedicated Priority Support Line        | Standard Queue           | VIP Priority Routing            |"
   },
   {
     "chunk_id": "dataset_test_r0",
