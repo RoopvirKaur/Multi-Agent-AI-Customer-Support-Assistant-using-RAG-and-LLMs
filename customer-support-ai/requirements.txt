@@ -33,6 +33,7 @@ google-generativeai
 
 # --- Embeddings & Vector Store ------------------------------
 faiss-cpu
+fastembed
 sentence-transformers
 
 # --- Document Processing ------------------------------------
