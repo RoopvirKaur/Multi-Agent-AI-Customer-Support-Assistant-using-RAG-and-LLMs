@@ -1,42 +1,72 @@
-# 🤖 Multi-Agent AI Customer Support Assistant
+# 🤖 Multi-Agent AI Customer Support Assistant (TechMart Electronics)
 
-A production-ready, multi-agent customer support system powered by **Google Gemini**, **FastAPI**, **Next.js**, and **FAISS** vector search. Built for **TechMart Electronics** as a demonstration of agentic AI orchestration.
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-009688.svg)](https://fastapi.tiangolo.com/)
+[![Next.js 14](https://img.shields.io/badge/Next.js-14.2-black.svg)](https://nextjs.org/)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-1.5%20Pro%2FFlash-4285F4.svg)](https://aistudio.google.com/)
+[![FAISS](https://img.shields.io/badge/VectorStore-FAISS-orange.svg)](https://github.com/facebookresearch/faiss)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 📐 Architecture Overview
+A production-ready, autonomous multi-agent customer support system built for **TechMart Electronics**. Powered by **Google Gemini**, **FastAPI**, **Next.js 14**, and **FAISS** vector search.
+
+---
+
+## 📐 System Architecture
 
 ```
-User Query
-    │
-    ▼
-Intent Detection Agent (Gemini)
-    │  Detects: billing | technical | product | complaint | faq
-    ▼
-Agent Router
-    │  Routes to one or more specialized agents (parallel)
-    ├──► Billing Agent
-    ├──► Technical Support Agent
-    ├──► Product Agent
-    ├──► Complaint Agent
-    └──► FAQ Agent
-              │
-              ▼
-         RAG Retrieval (FAISS + sentence-transformers)
-              │
-              ▼
-         Gemini LLM (grounded response)
-              │
-              ▼
-         Response Aggregator
-              │
-              ▼
-         Final Response to User
+                       ┌─────────────────────────┐
+                       │       User Query        │
+                       └────────────┬────────────┘
+                                    │
+                                    ▼
+                       ┌─────────────────────────┐
+                       │  Intent Detector Agent  │
+                       │     (Google Gemini)     │
+                       └────────────┬────────────┘
+                                    │
+            ┌───────────────────────┴───────────────────────┐
+            │  Multi-Intent Router (Async Parallel Tasks)   │
+            └───────┬──────────┬───────────┬───────────┬────┘
+                    │          │           │           │
+                    ▼          ▼           ▼           ▼
+               ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐
+               │Billing │ │Tech    │ │Product │ │Complain│ │FAQ     │
+               │Agent   │ │Agent   │ │Agent   │ │Agent   │ │Agent   │
+               └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘ └───┬────┘
+                   │          │           │           │          │
+                   └──────────┼───────────┼───────────┼──────────┘
+                              │
+                              ▼
+               ┌──────────────────────────────┐
+               │   RAG Retrieval Engine       │
+               │  (FAISS + MiniLM Embedder)   │
+               └──────────────┬───────────────┘
+                              │  Retrieved Documents & Context
+                              ▼
+               ┌──────────────────────────────┐
+               │     Google Gemini LLM        │
+               │    (Grounded Generation)     │
+               └──────────────┬───────────────┘
+                              │  Agent Sub-Responses
+                              ▼
+               ┌──────────────────────────────┐
+               │  Response Aggregator Agent   │
+               │  (Deduplication & Formatting)│
+               └──────────────┬───────────────┘
+                              │
+                              ▼
+                       ┌──────────────┐
+                       │ Final Answer │
+                       └──────────────┘
 ```
+
+---
 
 ## 🗂️ Project Structure
 
 ```
 customer-support-ai/
-├── frontend/           # Next.js 14 app (TypeScript + Tailwind)
+├── frontend/           # Next.js 14 app (TypeScript + Tailwind CSS)
 ├── backend/
 │   ├── agents/         # Specialized AI agents + router + aggregator
 │   ├── api/            # FastAPI route handlers
@@ -54,6 +84,8 @@ customer-support-ai/
 ├── requirements.txt    # Python dependencies
 └── README.md
 ```
+
+---
 
 ## 🚀 Local Setup
 
@@ -79,8 +111,8 @@ cp .env.example .env
 # Create and activate virtual environment
 python -m venv venv
 
-# Windows
-venv\Scripts\activate
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
 
 # macOS / Linux
 source venv/bin/activate
@@ -91,7 +123,7 @@ pip install -r requirements.txt
 
 ### 3. Database Setup
 
-Run the DDL script in your Supabase SQL Editor (see `Docs/implementation_plan.md` Phase 1 for the full DDL).
+Run the DDL script in your Supabase SQL Editor (see `Docs/architecture.md` for full database schema).
 
 ### 4. Ingest Knowledge Base
 
@@ -116,39 +148,50 @@ npm run dev
 # App available at http://localhost:3000
 ```
 
+---
+
 ## 🔑 Environment Variables
 
 See [`.env.example`](.env.example) for the full list of required variables.
 
-## 🤖 Agents
+---
 
-| Agent | Scope | Handles |
+## 🤖 Specialized Agents
+
+| Agent | Scope | Description / Handles |
 |---|---|---|
-| Billing Agent | `billing` | Payments, invoices, refunds, subscriptions |
-| Technical Support Agent | `technical` | Installation, bugs, errors, password reset |
-| Product Agent | `product` | Features, plans, pricing, availability |
-| Complaint Agent | `complaint` | Dissatisfaction, escalation, unresolved issues |
-| FAQ Agent | `faq` | Policies, hours, contact info, general queries |
+| **Billing Agent** | `billing` | Payments, invoices, refunds, subscriptions, transaction errors |
+| **Technical Support Agent** | `technical` | Installation, device bugs, errors, firmware, connectivity |
+| **Product Agent** | `product` | Specifications, pricing tiers, feature comparison, availability |
+| **Complaint Agent** | `complaint` | Dissatisfaction, escalations, apology messaging, priority tickets |
+| **FAQ Agent** | `faq` | Store hours, shipping options, warranty policies, general questions |
+
+---
 
 ## 📚 Knowledge Base
 
-8 documents covering TechMart Electronics policies, products, and support:
+8 PDF documents covering TechMart Electronics policies and product manuals:
 - `FAQ.pdf`, `RefundPolicy.pdf`, `ShippingPolicy.pdf`, `Warranty.pdf`
 - `Pricing.pdf`, `Products.pdf`, `InstallationGuide.pdf`, `UserManual.pdf`
+
+---
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS |
-| Backend | FastAPI, Python 3.11, Uvicorn |
-| Database | PostgreSQL (Supabase), SQLAlchemy (async) |
-| AI / LLM | Google Gemini via `langchain-google-genai` |
-| Embeddings | `sentence-transformers/all-MiniLM-L6-v2` |
-| Vector Store | FAISS (CPU) |
-| Auth | JWT (HS256) with bcrypt password hashing |
-| Rate Limiting | SlowAPI |
+| **Frontend** | Next.js 14, TypeScript, Tailwind CSS |
+| **Backend** | FastAPI, Python 3.11, Uvicorn |
+| **Database** | PostgreSQL (Supabase), SQLAlchemy (async) |
+| **AI / LLM** | Google Gemini via `langchain-google-genai` |
+| **Embeddings** | `sentence-transformers/all-MiniLM-L6-v2` |
+| **Vector Store** | FAISS (CPU) |
+| **Auth** | JWT (HS256) with bcrypt password hashing |
+| **Rate Limiting** | SlowAPI |
+
+---
 
 ## 📄 License
 
 MIT
+
