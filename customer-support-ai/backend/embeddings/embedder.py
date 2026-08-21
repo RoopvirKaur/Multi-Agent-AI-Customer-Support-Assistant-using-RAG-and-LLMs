@@ -24,6 +24,7 @@ DEFAULT_EMBEDDING_MODEL = os.getenv(
 )
 
 
+import gc
 import ctypes
 
 def trim_memory():

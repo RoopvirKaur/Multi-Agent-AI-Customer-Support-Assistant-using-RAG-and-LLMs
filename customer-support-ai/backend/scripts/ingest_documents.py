@@ -23,16 +23,22 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from backend.embeddings.embedder import get_embedder
 from backend.vectorstore.faiss_store import get_faiss_store
-from backend.rag.pipeline import process_directory
+from backend.rag.pipeline import process_all_sources
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Ingest Knowledge Base PDFs and build FAISS vector index.")
+    parser = argparse.ArgumentParser(description="Ingest Knowledge Base PDFs and Datasets into FAISS vector index.")
     parser.add_argument(
         "--kb-dir",
         type=str,
         default=str(PROJECT_ROOT / "knowledge_base"),
         help="Path to directory containing PDF documents",
+    )
+    parser.add_argument(
+        "--datasets-dir",
+        type=str,
+        default=str(PROJECT_ROOT / "datasets"),
+        help="Path to directory containing datasets CSV files",
     )
     parser.add_argument(
         "--index-path",
@@ -61,13 +67,15 @@ def main():
     args = parser.parse_args()
 
     kb_dir = Path(args.kb_dir)
+    datasets_dir = Path(args.datasets_dir)
     index_path = Path(args.index_path)
     metadata_path = Path(args.metadata_path)
 
     print("\n" + "=" * 65)
-    print(">> Starting TechMart Electronics Knowledge Base Ingestion...")
+    print(">> Starting TechMart Multi-Agent RAG Ingestion (KB + Datasets)...")
     print("=" * 65)
     print(f"Knowledge Base Dir: {kb_dir}")
+    print(f"Datasets Dir:       {datasets_dir}")
     print(f"Output Index Path:  {index_path}")
     print(f"Output Meta Path:   {metadata_path}")
     print(f"Chunk Parameters:   size={args.chunk_size}, overlap={args.chunk_overlap}")
@@ -75,9 +83,10 @@ def main():
 
     start_time = time.time()
 
-    # 1. Process all documents in KB directory
-    chunks = process_directory(
-        kb_dir,
+    # 1. Process all documents and datasets
+    chunks = process_all_sources(
+        kb_directory=kb_dir,
+        datasets_directory=datasets_dir,
         chunk_size=args.chunk_size,
         chunk_overlap=args.chunk_overlap,
     )

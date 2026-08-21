@@ -427,6 +427,106 @@ def process_directory(
             f"  Processed '{pdf_file.name}': generated {len(doc_chunks)} chunks "
             f"(Scopes: {assign_agent_scope(pdf_file.name)})"
         )
-        all_chunks.extend(doc_chunks)
+    return all_chunks
+
+
+import csv
+
+def process_csv_dataset(
+    csv_path: Union[str, Path],
+    max_rows: int = 150,
+) -> List[Dict]:
+    """
+    Process CSV dataset files (such as CFPB complaints or Banking77) into structured RAG chunks.
+    Extracts representative customer complaints, issues, sub-issues, and resolution pathways.
+    """
+    path = Path(csv_path)
+    if not path.exists():
+        return []
+
+    chunks: List[Dict] = []
+    filename = path.name
+    stem = path.stem.lower()
+
+    # Determine scopes based on dataset filename or path
+    if "complaint" in stem or "cfpb" in str(path).lower():
+        scopes = ["complaint", "billing"]
+    elif "banking" in stem:
+        scopes = ["billing", "faq"]
+    else:
+        scopes = ["faq"]
+
+    try:
+        with open(path, mode="r", encoding="utf-8", errors="replace") as f:
+            reader = csv.DictReader(f)
+            row_idx = 0
+            for row in reader:
+                if row_idx >= max_rows:
+                    break
+
+                narrative = row.get("Consumer complaint narrative") or row.get("text") or ""
+                issue = row.get("Issue") or row.get("category") or ""
+                sub_issue = row.get("Sub-issue") or row.get("Sub-product") or ""
+                product = row.get("Product") or ""
+                response = row.get("Company response to consumer") or row.get("Company public response") or ""
+
+                if not narrative.strip() and not issue.strip():
+                    continue
+
+                chunk_text_parts = [f"[Dataset Reference: {path.name}]"]
+                if product.strip():
+                    chunk_text_parts.append(f"Product/Category: {product.strip()}")
+                if issue.strip():
+                    chunk_text_parts.append(f"Issue: {issue.strip()}")
+                if sub_issue.strip():
+                    chunk_text_parts.append(f"Details: {sub_issue.strip()}")
+                if narrative.strip():
+                    narrative_clean = " ".join(narrative.split())
+                    if len(narrative_clean) > 400:
+                        narrative_clean = narrative_clean[:400] + "..."
+                    chunk_text_parts.append(f"Customer Narrative: {narrative_clean}")
+                if response.strip():
+                    chunk_text_parts.append(f"Resolution/Outcome: {response.strip()}")
+
+                full_text = "\n".join(chunk_text_parts)
+                chunk_id = f"dataset_{stem}_r{row_idx}"
+
+                chunks.append({
+                    "chunk_id": chunk_id,
+                    "document": filename,
+                    "document_title": f"Dataset {path.name}",
+                    "page": None,
+                    "scopes": scopes,
+                    "text": full_text,
+                })
+                row_idx += 1
+    except Exception as exc:
+        print(f"  [Warning] Failed to process dataset CSV '{filename}': {exc}")
+
+    return chunks
+
+
+def process_all_sources(
+    kb_directory: Union[str, Path],
+    datasets_directory: Optional[Union[str, Path]] = None,
+    chunk_size: int = DEFAULT_CHUNK_SIZE,
+    chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
+) -> List[Dict]:
+    """
+    Process all PDF documents from knowledge_base and CSV files from datasets directory.
+    Combines both sources into a unified list of chunk dicts for vector indexing.
+    """
+    all_chunks = process_directory(kb_directory, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+    if datasets_directory:
+        ds_path = Path(datasets_directory)
+        if ds_path.exists():
+            csv_files = sorted(ds_path.glob("**/*.csv"))
+            print(f"\nFound {len(csv_files)} CSV dataset files in {ds_path}")
+            for csv_file in csv_files:
+                ds_chunks = process_csv_dataset(csv_file, max_rows=150)
+                if ds_chunks:
+                    print(f"  Processed dataset '{csv_file.name}': generated {len(ds_chunks)} chunks (Scopes: {ds_chunks[0]['scopes']})")
+                    all_chunks.extend(ds_chunks)
 
     return all_chunks
