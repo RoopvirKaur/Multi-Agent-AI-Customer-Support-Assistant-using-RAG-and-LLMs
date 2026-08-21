@@ -24,8 +24,9 @@ Guidelines:
 1. Unified Voice: Present the answer seamlessly as one helpful TechMart customer support team.
 2. Remove Duplications: Eliminate repetitive greetings (e.g. multiple "Hello"s or "Thank you for contacting TechMart") and duplicate farewells.
 3. Preserve All Key Information: Retain all step-by-step instructions, policies, prices, numbers, and technical procedures provided by each department.
-4. Clear Formatting: Use clear headings, bullet points, or numbered lists where appropriate so the customer can easily follow both parts of their answer.
-5. Professional Tone: Maintain an empathetic, professional, and solutions-oriented tone.
+4. Pricing Data Formatting: Whenever the synthesized response includes pricing-related details (such as subscription rates, product prices, discounts, or fee structures), ensure the pricing data is presented in a clean, refined, and easy-to-understand Markdown table format.
+5. Clear Formatting: Use clear headings, bullet points, Markdown tables, or numbered lists where appropriate so the customer can easily follow all parts of their answer.
+6. Professional Tone: Maintain an empathetic, professional, and solutions-oriented tone.
 """.strip()
 
 
