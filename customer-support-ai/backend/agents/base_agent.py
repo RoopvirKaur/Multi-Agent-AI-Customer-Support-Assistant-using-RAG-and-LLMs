@@ -143,10 +143,18 @@ class BaseAgent(ABC):
         except Exception as e:
             status = f"error: {e}"
             logger.error(f"Agent '{self.name}' generation failed: {e}")
-            response_text = (
-                f"I encountered an issue retrieving detailed information for your request. "
-                f"Please allow our {self.name.capitalize()} team to assist you further."
-            )
+            if chunks:
+                top_texts = [c.get("text", "") for c in chunks[:3] if c.get("text")]
+                joined_context = "\n\n".join(top_texts)
+                response_text = (
+                    f"Here is the relevant information retrieved from our verified records:\n\n"
+                    f"{joined_context}"
+                )
+            else:
+                response_text = (
+                    f"I encountered a temporary system limit while processing your request. "
+                    f"Please allow our {self.name.capitalize()} team to assist you further or ask your question again in a moment."
+                )
 
         total_ms = (time.time() - start_time) * 1000
         logger.log_agent_execution(
@@ -184,10 +192,18 @@ class BaseAgent(ABC):
             )
         except Exception as e:
             logger.error(f"Agent '{self.name}' sync generation failed: {e}")
-            response_text = (
-                f"I encountered an issue retrieving detailed information for your request. "
-                f"Please allow our {self.name.capitalize()} team to assist you further."
-            )
+            if chunks:
+                top_texts = [c.get("text", "") for c in chunks[:3] if c.get("text")]
+                joined_context = "\n\n".join(top_texts)
+                response_text = (
+                    f"Here is the relevant information retrieved from our verified records:\n\n"
+                    f"{joined_context}"
+                )
+            else:
+                response_text = (
+                    f"I encountered a temporary system limit while processing your request. "
+                    f"Please allow our {self.name.capitalize()} team to assist you further or ask your question again in a moment."
+                )
 
         return AgentResponse(
             text=response_text,
