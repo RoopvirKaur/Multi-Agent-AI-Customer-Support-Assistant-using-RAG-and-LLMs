@@ -24,6 +24,21 @@ DEFAULT_EMBEDDING_MODEL = os.getenv(
 )
 
 
+import ctypes
+
+def trim_memory():
+    """
+    Force Garbage Collector and glibc memory allocator (libc.so.6 malloc_trim)
+    to release unallocated C++ heap memory back to the OS on Linux/Docker containers.
+    Drastically reduces RSS memory consumption on Render 512MB free tier.
+    """
+    gc.collect()
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
+
+
 class Embedder:
     """
     Singleton Embedder wrapper around SentenceTransformer.
@@ -44,12 +59,11 @@ class Embedder:
     def model(self) -> SentenceTransformer:
         if self._model is None:
             print(f"Loading embedding model: {self.model_name}...")
-            import gc
-            gc.collect()
+            trim_memory()
             with torch.no_grad():
                 self._model = SentenceTransformer(self.model_name, device="cpu")
                 self._model.eval()
-            gc.collect()
+            trim_memory()
             print("Embedding model loaded successfully.")
         return self._model
 
