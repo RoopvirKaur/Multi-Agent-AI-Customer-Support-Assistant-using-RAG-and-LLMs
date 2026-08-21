@@ -63,8 +63,8 @@ class Retriever:
         # 1. Embed query vector
         query_vec = self.embedder.encode(query.strip(), normalize=True)
 
-        # 2. Search FAISS candidate pool (retrieve larger pool if filtering by scope)
-        candidate_k = top_k * 4 if agent_scope else top_k
+        # 2. Search FAISS candidate pool across all index items when filtering by scope
+        candidate_k = len(self.store.metadata) if agent_scope and self.store.metadata else top_k
         raw_results = self.store.search(query_vec, top_k=candidate_k)
 
         # 3. Filter by agent_scope and similarity threshold

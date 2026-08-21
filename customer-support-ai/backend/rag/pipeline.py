@@ -74,12 +74,12 @@ except ImportError:
 
 # ── Agent Scope Mapping (Implementation Plan §4.3) ─────────────────
 SCOPE_MAP: Dict[str, List[str]] = {
-    "faq.pdf":              ["faq", "complaint"],
-    "refund_policy.pdf":    ["billing", "complaint"],
+    "faq.pdf":              ["faq", "complaint", "billing"],
+    "refund_policy.pdf":    ["faq", "billing", "complaint"],
     "shipping_policy.pdf":  ["faq", "billing"],
     "warranty.pdf":         ["faq", "technical"],
-    "pricing.pdf":          ["billing", "product"],
-    "products.pdf":         ["product"],
+    "pricing.pdf":          ["billing", "product", "faq"],
+    "products.pdf":         ["product", "faq"],
     "installation_guide.pdf": ["technical"],
     "user_manual.pdf":      ["technical"],
 }
@@ -427,6 +427,7 @@ def process_directory(
             f"  Processed '{pdf_file.name}': generated {len(doc_chunks)} chunks "
             f"(Scopes: {assign_agent_scope(pdf_file.name)})"
         )
+        all_chunks.extend(doc_chunks)
     return all_chunks
 
 
@@ -451,10 +452,10 @@ def process_csv_dataset(
     # Determine scopes based on dataset filename or path
     if "complaint" in stem or "cfpb" in str(path).lower():
         scopes = ["complaint", "billing"]
-    elif "banking" in stem:
-        scopes = ["billing", "faq"]
+    elif "banking" in stem or "test" in stem or "train" in stem:
+        scopes = ["banking", "billing"]
     else:
-        scopes = ["faq"]
+        scopes = ["dataset"]
 
     try:
         with open(path, mode="r", encoding="utf-8", errors="replace") as f:
@@ -473,20 +474,20 @@ def process_csv_dataset(
                 if not narrative.strip() and not issue.strip():
                     continue
 
-                chunk_text_parts = [f"[Dataset Reference: {path.name}]"]
+                chunk_text_parts = [f"Source Dataset: {path.name}"]
                 if product.strip():
-                    chunk_text_parts.append(f"Product/Category: {product.strip()}")
+                    chunk_text_parts.append(f"• Category: {product.strip()}")
                 if issue.strip():
-                    chunk_text_parts.append(f"Issue: {issue.strip()}")
+                    chunk_text_parts.append(f"• Reported Issue: {issue.strip()}")
                 if sub_issue.strip():
-                    chunk_text_parts.append(f"Details: {sub_issue.strip()}")
+                    chunk_text_parts.append(f"• Issue Details: {sub_issue.strip()}")
                 if narrative.strip():
                     narrative_clean = " ".join(narrative.split())
                     if len(narrative_clean) > 400:
                         narrative_clean = narrative_clean[:400] + "..."
-                    chunk_text_parts.append(f"Customer Narrative: {narrative_clean}")
+                    chunk_text_parts.append(f"• Customer Summary: {narrative_clean}")
                 if response.strip():
-                    chunk_text_parts.append(f"Resolution/Outcome: {response.strip()}")
+                    chunk_text_parts.append(f"• Status/Resolution: {response.strip()}")
 
                 full_text = "\n".join(chunk_text_parts)
                 chunk_id = f"dataset_{stem}_r{row_idx}"

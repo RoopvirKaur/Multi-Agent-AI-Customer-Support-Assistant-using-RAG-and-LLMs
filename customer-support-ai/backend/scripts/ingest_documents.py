@@ -102,7 +102,7 @@ def main():
 
     # 3. Generate embeddings
     embedder = get_embedder()
-    print(f"Fitting TF-IDF vocabulary & generating 1024-dim vectors for {len(texts)} chunks...")
+    print(f"Fitting TF-IDF vocabulary & generating 10000-dim vectors for {len(texts)} chunks...")
     embedder.fit_corpus(texts)
     embeddings = embedder.encode_batch(texts, normalize=True, batch_size=64)
     print(f"[OK] Generated embeddings matrix of shape: {embeddings.shape}")
