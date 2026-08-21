@@ -45,12 +45,12 @@ Classify the customer message into one or more of the following standard intent 
 - "billing": questions about payment methods, duplicate charges, billing disputes, subscriptions, invoices, pricing plans, returns, and refund requests.
 - "technical": device not turning on, power issues, product setup, device installation, login/password problems, app syncing, error codes, hardware bugs, and troubleshooting.
 - "product": technical specifications, features, model comparisons (Standard vs Pro), compatibility, and product catalog availability.
-- "complaint": customer dissatisfaction, delayed shipments, broken items, angry feedback, and escalation requests.
+- "complaint": customer dissatisfaction, delayed shipments, broken items, angry feedback, escalation requests, questions about customer complaints, complaint datasets, and issue records.
 - "faq": general inquiries, store hours, contact info, shipping delivery times, and warranty overview.
 
 CRITICAL INSTRUCTIONS:
 1. Multi-intent / Compound messages: If the user describes multiple distinct issues (e.g. "I was charged twice and my device won't turn on", or "How much is Pro and how do I install it?"), you MUST identify and include ALL relevant intents.
-2. Return ONLY a valid JSON array of strings, e.g. ["billing", "technical"] or ["billing"].
+2. Return ONLY a valid JSON array of strings, e.g. ["billing", "technical"] or ["complaint"].
 3. Do not include markdown formatting, backticks, or extra words.
 """.strip()
 
@@ -126,18 +126,23 @@ class IntentDetector:
         if not message or not message.strip():
             return ["faq"]
 
+        # Fast keyword check for explicit complaint requests
+        msg_lower = message.lower()
+        if "complaint" in msg_lower or "complaints" in msg_lower:
+            return ["complaint"]
+
         try:
             raw_response = self.llm_client.generate(
                 system_prompt=INTENT_CLASSIFICATION_PROMPT,
                 user_message=f"Customer message: \"{message.strip()}\"",
                 history=history,
-                temperature=0.0,
+                temperature=0.3,
                 max_output_tokens=100,
             )
             return self._parse_llm_output(raw_response)
         except Exception as e:
-            logger.error(f"Intent detection LLM call failed: {e}. Falling back to ['faq'].")
-            return ["faq"]
+            logger.error(f"Intent detection LLM call failed: {e}. Falling back to ['complaint' if 'complaint' in message else 'faq'].")
+            return ["complaint"] if "complaint" in message.lower() else ["faq"]
 
     async def adetect(
         self,
@@ -150,18 +155,23 @@ class IntentDetector:
         if not message or not message.strip():
             return ["faq"]
 
+        # Fast keyword check for explicit complaint requests
+        msg_lower = message.lower()
+        if "complaint" in msg_lower or "complaints" in msg_lower:
+            return ["complaint"]
+
         try:
             raw_response = await self.llm_client.agenerate(
                 system_prompt=INTENT_CLASSIFICATION_PROMPT,
                 user_message=f"Customer message: \"{message.strip()}\"",
                 history=history,
-                temperature=0.0,
+                temperature=0.3,
                 max_output_tokens=100,
             )
             return self._parse_llm_output(raw_response)
         except Exception as e:
-            logger.error(f"Async intent detection LLM call failed: {e}. Falling back to ['faq'].")
-            return ["faq"]
+            logger.error(f"Async intent detection LLM call failed: {e}. Falling back to ['complaint' if 'complaint' in message else 'faq'].")
+            return ["complaint"] if "complaint" in message.lower() else ["faq"]
 
 
 # Global singleton
