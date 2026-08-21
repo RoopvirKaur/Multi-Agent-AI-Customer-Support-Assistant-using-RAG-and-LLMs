@@ -119,25 +119,99 @@ class BaseAgent(ABC):
     def _format_clean_fallback(self, chunks: List[Dict[str, Any]]) -> str:
         """
         Format retrieved context chunks into clean, elegant Markdown customer support response.
+        Removes raw document titles, font encoding artifacts, and formats tabular data neatly.
         """
+        import re
+
         if not chunks:
             return (
                 f"I apologize, but I couldn't locate specific details for your query in our records. "
                 f"Please allow our {self.name.capitalize()} support team to assist you further."
             )
 
-        items = []
-        for idx, chunk in enumerate(chunks[:3], 1):
-            doc = chunk.get("document", "Record")
-            text = chunk.get("text", "").strip()
-            lines = [line.strip() for line in text.split("\n") if line.strip() and not line.startswith("Source Dataset:")]
-            body = "\n".join(lines)
-            items.append(f"**Item {idx} — {doc}**:\n{body}")
+        table_rows = []
+        text_bullets = []
 
-        formatted = "\n\n".join(items)
+        for chunk in chunks[:4]:
+            raw_text = chunk.get("text", "").strip()
+            # Clean up font artifacts like (cid:127) and extra whitespace
+            cleaned_text = re.sub(r'\(cid:\d+\)', '', raw_text)
+            cleaned_text = re.sub(r'[ \t]+', ' ', cleaned_text).strip()
+
+            if cleaned_text.startswith("Source Dataset:"):
+                continue
+
+            lines = [line.strip() for line in cleaned_text.split("\n") if line.strip()]
+            for line in lines:
+                if line.startswith("Source Dataset:"):
+                    continue
+
+                if "||" in line:
+                    sub_segments = [seg.strip() for seg in line.split("||") if seg.strip()]
+                    for seg in sub_segments:
+                        parts = [p.strip() for p in seg.split("|") if p.strip()]
+                        if len(parts) >= 2:
+                            table_rows.append(parts)
+                        elif seg:
+                            text_bullets.append(seg)
+                elif "|" in line:
+                    parts = [p.strip() for p in line.split("|") if p.strip()]
+                    if len(parts) >= 2:
+                        table_rows.append(parts)
+                    elif line:
+                        text_bullets.append(line)
+                else:
+                    if line:
+                        text_bullets.append(line)
+
+        formatted_sections = []
+
+        if table_rows:
+            unique_rows = []
+            seen_tuples = set()
+            for r in table_rows:
+                t = tuple(r)
+                if t not in seen_tuples and not all(c.startswith("-") for c in r):
+                    seen_tuples.add(t)
+                    unique_rows.append(r)
+
+            if unique_rows:
+                num_cols = max(len(r) for r in unique_rows)
+                header = list(unique_rows[0])
+                data_rows = unique_rows[1:] if len(unique_rows) > 1 else unique_rows
+
+                while len(header) < num_cols:
+                    header.append(f"Detail {len(header)+1}")
+
+                header_str = "| " + " | ".join(header) + " |"
+                separator_str = "| " + " | ".join([":---"] * num_cols) + " |"
+
+                body_lines = []
+                for row in data_rows:
+                    padded_row = list(row) + [""] * (num_cols - len(row))
+                    body_lines.append("| " + " | ".join(padded_row) + " |")
+
+                markdown_table = "\n".join([header_str, separator_str] + body_lines)
+                formatted_sections.append(markdown_table)
+
+        if text_bullets:
+            unique_bullets = []
+            seen_b = set()
+            for b in text_bullets:
+                if b not in seen_b:
+                    seen_b.add(b)
+                    clean_b = re.sub(r'^[•\-\*]\s*', '', b).strip()
+                    if clean_b:
+                        unique_bullets.append(f"• {clean_b}")
+
+            if unique_bullets:
+                formatted_sections.append("\n".join(unique_bullets[:5]))
+
+        final_body = "\n\n".join(formatted_sections) if formatted_sections else "Here are the relevant details from our records."
+
         return (
-            f"Here are the relevant details retrieved from our verified records:\n\n"
-            f"{formatted}\n\n"
+            f"Here are the relevant details from our verified records:\n\n"
+            f"{final_body}\n\n"
             f"Please let me know if you need any additional clarification!"
         )
 
