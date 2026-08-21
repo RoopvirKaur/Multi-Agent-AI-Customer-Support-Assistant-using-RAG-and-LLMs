@@ -35,10 +35,7 @@ async def get_session_history(
     """
     session = await crud.get_session_by_id(db, session_id=session_id)
     if not session or session.user_id != current_user.id:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Session not found or unauthorized.",
-        )
+        return []
 
     messages = await crud.get_messages_by_session(
         db,
