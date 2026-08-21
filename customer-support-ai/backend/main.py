@@ -9,8 +9,11 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, status, HTTPException
 from fastapi.responses import JSONResponse
+# pyrefly: ignore [missing-import]
 from slowapi import Limiter, _rate_limit_exceeded_handler
+# pyrefly: ignore [missing-import]
 from slowapi.util import get_remote_address
+# pyrefly: ignore [missing-import]
 from slowapi.errors import RateLimitExceeded
 from sqlalchemy import text
 
@@ -112,6 +115,9 @@ async def log_requests_middleware(request: Request, call_next):
 app.state.limiter = limiter
 
 
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+
 @app.exception_handler(RateLimitExceeded)
 async def custom_rate_limit_handler(request: Request, exc: RateLimitExceeded):
     headers = get_cors_headers(request)
@@ -139,8 +145,8 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-@app.exception_handler(HTTPException)
-async def custom_http_exception_handler(request: Request, exc: HTTPException):
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
     headers = get_cors_headers(request)
     if exc.headers:
         headers.update(exc.headers)

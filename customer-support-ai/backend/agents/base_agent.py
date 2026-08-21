@@ -96,6 +96,7 @@ class BaseAgent(ABC):
             user_message=query,
             history=history,
             context=context,
+            temperature=0.3,
         )
 
     async def generate_response_async(
@@ -112,6 +113,7 @@ class BaseAgent(ABC):
             user_message=query,
             history=history,
             context=context,
+            temperature=0.3,
         )
 
     async def run(

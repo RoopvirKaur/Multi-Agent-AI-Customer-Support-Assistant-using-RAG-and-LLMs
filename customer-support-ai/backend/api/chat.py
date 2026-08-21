@@ -58,14 +58,13 @@ async def send_message(
     user_query = payload.message.strip()
 
     # 1. Validate or create session
+    existing_session = None
     if session_id:
         existing_session = await crud.get_session_by_id(db, session_id=session_id)
-        if not existing_session or existing_session.user_id != current_user.id:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Session not found or does not belong to current user.",
-            )
-    else:
+        if existing_session and existing_session.user_id != current_user.id:
+            existing_session = None
+
+    if not existing_session:
         # Create new session with auto title from message snippet
         title = user_query[:30] + ("..." if len(user_query) > 30 else "")
         new_session = await crud.create_session(

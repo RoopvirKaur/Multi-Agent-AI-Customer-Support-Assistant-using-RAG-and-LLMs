@@ -25,7 +25,11 @@ def get_cors_headers(request: Request) -> dict:
     """
     origin = request.headers.get("origin")
     if not origin:
-        return {}
+        return {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        }
     return {
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Credentials": "true",
